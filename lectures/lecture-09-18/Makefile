@@ -1,0 +1,18 @@
+######
+MYATSCC=myatscc
+######
+all::
+all:: \
+lecture-09-18_dats
+######
+lecture-09-18_dats: \
+lecture-09-18.dats; \
+$(MYATSCC) lecture-09-18.dats
+######
+clean:: ; rm -f *~
+######
+cleanall:: clean
+cleanall:: ; rm -f lecture-09-18_dats
+######
+
+###### end of [Makefile] ######
