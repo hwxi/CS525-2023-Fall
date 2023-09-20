@@ -84,4 +84,4 @@ implement main0() = () // HX: it is a dummy
 
 (* ****** ****** *)
 
-(* end of [CS525-2023-Fall/mylib/lambda0.dats] *)
+(* end of [CS525-2023-Fall/lectures/lecture-09-20/lambda0.dats] *)

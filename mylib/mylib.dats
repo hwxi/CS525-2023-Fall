@@ -7,23 +7,24 @@ for BU CAS CS 525 (2023F)
 *)
 //
 (* ****** ****** *)
-
+//
 datatype
 mylist(a:t@ype) =
-  | mylist_nil of ()
-  | mylist_cons of (a, mylist(a))
-  
+| mylist_nil of ()
+| mylist_cons of (a, mylist(a))
+//
 (* ****** ****** *)
-
+//
 extern
 fun
 {a:t@ype}
 print_mylist(mylist(a)): void
+//
 extern
 fun
 {a:t@ype}
 fprint_mylist(FILEref, mylist(a)): void
-
+//
 (* ****** ****** *)
 
 #symload print with print_mylist
