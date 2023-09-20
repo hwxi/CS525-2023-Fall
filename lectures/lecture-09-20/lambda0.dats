@@ -67,7 +67,7 @@ val K' = TMlam("x", TMlam("y", y))
 (* ****** ****** *)
 //
 (*
-HX-2022-09-14:
+HX-2023-09-20:
 How to test:
 myatscc lambda0.dats && ./lambda0_dats
 *)
@@ -84,4 +84,4 @@ implement main0() = () // HX: it is a dummy
 
 (* ****** ****** *)
 
-(* end of [CS525-2022-Fall/mylib/lambda0.dats] *)
+(* end of [CS525-2023-Fall/mylib/lambda0.dats] *)
