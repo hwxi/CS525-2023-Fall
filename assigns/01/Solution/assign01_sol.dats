@@ -5,6 +5,8 @@
 //
 // How to compile:
 // myatscc assign01_sol.dats
+// or
+// patscc -o assign01_sol_dats -DATS_MEMALLOC_LIBC assign01_sol.dats
 //
 (* ****** ****** *)
 #include
