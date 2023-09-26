@@ -16,6 +16,15 @@ mylist(a:t@ype) =
 (* ****** ****** *)
 //
 extern
+fun{a:t@ype}
+mylist_sing(x1: a): mylist(a)
+extern
+fun{a:t@ype}
+mylist_pair(x1: a, x2: a): mylist(a)
+//
+(* ****** ****** *)
+//
+extern
 fun
 {a:t@ype}
 print_mylist(mylist(a)): void
@@ -29,6 +38,20 @@ fprint_mylist(FILEref, mylist(a)): void
 
 #symload print with print_mylist
 #symload fprint with fprint_mylist
+
+(* ****** ****** *)
+(* ****** ****** *)
+
+implement
+{a}
+mylist_sing(x1) =
+mylist_cons
+(x1, mylist_nil())
+implement
+{a}
+mylist_pair(x1, x2) =
+mylist_cons
+(x1, mylist_sing<a>(x2))
 
 (* ****** ****** *)
 
