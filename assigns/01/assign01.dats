@@ -5,7 +5,7 @@ Due: Wednesday, the 27th of September
 (* ****** ****** *)
 (*
 HX-2023-09-20:
-Total: 50 points
+Total: 22 points
 This assignment asks you to implement
 list-based set oprations.
 *)

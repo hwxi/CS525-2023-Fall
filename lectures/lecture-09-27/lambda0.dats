@@ -150,6 +150,7 @@ case+ t0 of
 |TMvar _ => t0
 //
 |TMlam _ => t0
+//
 (*
 // HX: please note
 // no evaluagtion under lambda!!!
@@ -165,7 +166,9 @@ val t1 = term_interp(t1)
 TMapp(t1, t2) =>
 let
 val t1 = term_interp(t1)
+(*
 val t2 = term_interp(t2)
+*)
 in//let
 case+ t1 of
 | TMlam(x1, tt) =>
@@ -196,6 +199,46 @@ val-mylist_cons(t2, ts) = ts
 val-TMint(i1) = t1 and TMint(i2) = t2
 in
   TMint(i1 - i2)
+end
+| "*" =>
+let
+val-mylist_cons(t1, ts) = ts
+val-mylist_cons(t2, ts) = ts
+val-TMint(i1) = t1 and TMint(i2) = t2
+in
+  TMint(i1 * i2)
+end
+| "<" =>
+let
+val-mylist_cons(t1, ts) = ts
+val-mylist_cons(t2, ts) = ts
+val-TMint(i1) = t1 and TMint(i2) = t2
+in
+  TMbtf(i1 < i2)
+end
+| ">" =>
+let
+val-mylist_cons(t1, ts) = ts
+val-mylist_cons(t2, ts) = ts
+val-TMint(i1) = t1 and TMint(i2) = t2
+in
+  TMbtf(i1 > i2)
+end
+| "<=" =>
+let
+val-mylist_cons(t1, ts) = ts
+val-mylist_cons(t2, ts) = ts
+val-TMint(i1) = t1 and TMint(i2) = t2
+in
+  TMbtf(i1 <= i2)
+end
+| ">=" =>
+let
+val-mylist_cons(t1, ts) = ts
+val-mylist_cons(t2, ts) = ts
+val-TMint(i1) = t1 and TMint(i2) = t2
+in
+  TMbtf(i1 >= i2)
 end
 //
 end // end of [TMopr(nm, ts)]
@@ -311,6 +354,23 @@ mylist_cons
 (* ****** ****** *)
 
 fun
+TMlt
+( t1: term
+, t2: term): term = TMopr("<", mylist_pair(t1, t2))
+fun
+TMgt
+( t1: term
+, t2: term): term = TMopr(">", mylist_pair(t1, t2))
+fun
+TMlte
+( t1: term
+, t2: term): term = TMopr("<=", mylist_pair(t1, t2))
+fun
+TMgte
+( t1: term
+, t2: term): term = TMopr(">=", mylist_pair(t1, t2))
+
+fun
 TMadd
 ( t1: term
 , t2: term): term = TMopr("+", mylist_pair(t1, t2))
@@ -318,14 +378,20 @@ fun
 TMsub
 ( t1: term
 , t2: term): term = TMopr("-", mylist_pair(t1, t2))
+fun
+TMmul
+( t1: term
+, t2: term): term = TMopr("*", mylist_pair(t1, t2))
 
 (* ****** ****** *)
-
+//
 val test1 = println!
 ("TMadd(TMint(1), TMint(2)) = ", term_interp(TMadd(TMint(1), TMint(2))))
 val test2 = println!
 ("TMsub(TMint(1), TMint(2)) = ", term_interp(TMsub(TMint(1), TMint(2))))
-
+val test3 = println!
+("TMmul(TMint(1), TMint(2)) = ", term_interp(TMmul(TMint(1), TMint(2))))
+//
 (* ****** ****** *)
 
 fun
@@ -345,10 +411,12 @@ val TMnum0 = Church_numeral(0)
 val TMnum1 = Church_numeral(1)
 val TMnum2 = Church_numeral(2)
 val TMnum3 = Church_numeral(3)
+val TMnum4 = Church_numeral(4)
 val () = println!("TMnum0 = ", TMnum0)
 val () = println!("TMnum1 = ", TMnum1)
 val () = println!("TMnum2 = ", TMnum2)
 val () = println!("TMnum3 = ", TMnum3)
+val () = println!("TMnum4 = ", TMnum4)
 
 (* ****** ****** *)
 //
@@ -384,8 +452,22 @@ TMapp(TMapp(m, TMapp(n, f)), x))))) end
 //
 (* ****** ****** *)
 
+val Church_pow =
+let
+val m = TMvar"m"
+and n = TMvar"n"
+val f = TMvar"f"
+and x = TMvar"x" in
+TMlam("m",
+TMlam("n",
+TMlam("f",
+TMlam("x",
+TMapp(TMapp(TMapp(n, m), f), x))))) end
+
+(* ****** ****** *)
+
 val
-TMsucf =
+TMsucf = // successor
 TMlam("x", TMadd(TMvar"x", TMint(1)))
 
 fun Church_num2int(n: term): term =
@@ -403,6 +485,11 @@ TMnum_add_2_3 =
 TMapp(TMapp(Church_add, TMnum2), TMnum3)
 val () =
 println!("TMnum_add_2_3 = ", Church_num2int(TMnum_add_2_3))
+val
+TMnum_add_3_4 =
+TMapp(TMapp(Church_add, TMnum3), TMnum4)
+val () =
+println!("TMnum_add_3_4 = ", Church_num2int(TMnum_add_3_4))
 
 (* ****** ****** *)
 
@@ -416,6 +503,75 @@ TMnum_mul_3_3 =
 TMapp(TMapp(Church_mul, TMnum3), TMnum3)
 val () =
 println!("TMnum_mul_3_3 = ", Church_num2int(TMnum_mul_3_3))
+val
+TMnum_mul_4_4 =
+TMapp(TMapp(Church_mul, TMnum4), TMnum4)
+val () =
+println!("TMnum_mul_4_4 = ", Church_num2int(TMnum_mul_4_4))
+
+(* ****** ****** *)
+
+val
+TMnum_pow_3_4 =
+TMapp(TMapp(Church_pow, TMnum3), TMnum4)
+val () =
+println!("TMnum_pow_3_4 = ", Church_num2int(TMnum_pow_3_4))
+
+(* ****** ****** *)
+
+(*
+fun fact(x) =
+if x > 0 then x * fact(x-1) else 1
+fun fibo(x) =
+if x >= 2 then fibo(x-2) + fibo(x-1) else x
+*)
+
+(* ****** ****** *)
+
+val Y =
+let
+val f = TMvar"f"
+and x = TMvar"x" in
+TMlam("f",
+TMapp(
+TMlam("x", TMapp(f, TMapp(x, x))),
+TMlam("x", TMapp(f, TMapp(x, x))))) end
+
+(* ****** ****** *)
+
+(*
+val FIBO =
+lam f. lam x.
+if x >= 2 then f(x-2) + f(x-1) else x
+Y = lam f. (lam x. f(x(x)))(lam x. f(x(x)))
+fun fibo = Y(F)
+fun fibo = F(fibo) // fibo is a fixed point of F!
+*)
+
+(* ****** ****** *)
+
+val FIBO =
+let
+val f = TMvar"f"
+val x = TMvar"x" in
+TMlam("f",
+TMlam("x",
+TMif0(
+TMgte(x, TMint(2)),
+TMadd(
+TMapp(f, TMsub(x, TMint(2))),
+TMapp(f, TMsub(x, TMint(1)))), x))) end
+
+(* ****** ****** *)
+
+val TMfibo = TMapp(Y, FIBO)
+
+(* ****** ****** *)
+
+val () = println!
+("TMfibo5 = ", term_interp(TMapp(TMfibo, TMint(5))))
+val () = println!
+("TMfibo10 = ", term_interp(TMapp(TMfibo, TMint(10))))
 
 (* ****** ****** *)
 
