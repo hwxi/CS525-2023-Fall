@@ -4,21 +4,24 @@ MYATSCC=myatscc
 ######
 all::
 all:: \
-assign01_sol_dats
+assign02_sol_dats
 ######
-# assign01_sol_dats: \
-# assign01_sol.dats; \
-# $(MYATSCC) assign01_sol.dats
+test:: \
+assign02_sol_dats; ./$<
 ######
-assign01_sol_dats: \
-assign01_sol.dats; \
-$(PATSCC) -DATS_MEMALLOC_LIBC -o $@ $<
+# assign02_sol_dats: \
+# assign02_sol.dats; \
+# $(MYATSCC) assign02_sol.dats
+######
+assign02_sol_dats: \
+assign02_sol.dats; \
+$(PATSCC) -O2 -DATS_MEMALLOC_GCBDW -o $@ $< -lgc
 ######
 clean:: ; rm -f *~
 ######
 cleanall:: clean
-cleanall:: ; rm -f assign01_sol_dats
-cleanall:: ; rm -f assign01_sol_dats.c
+cleanall:: ; rm -f assign02_sol_dats
+cleanall:: ; rm -f assign02_sol_dats.c
 ######
 
-###### end of [Makefile] ######
+############ end of [Makefile] ############
