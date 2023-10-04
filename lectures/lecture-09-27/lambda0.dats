@@ -352,37 +352,44 @@ mylist_cons
 ) (* end of [termlst_subst0(t0, x0, sub)] *)
 
 (* ****** ****** *)
-
+//
 fun
 TMlt
 ( t1: term
-, t2: term): term = TMopr("<", mylist_pair(t1, t2))
+, t2: term): term =
+TMopr("<", mylist_pair(t1, t2))
 fun
 TMgt
 ( t1: term
-, t2: term): term = TMopr(">", mylist_pair(t1, t2))
+, t2: term): term =
+TMopr(">", mylist_pair(t1, t2))
 fun
 TMlte
 ( t1: term
-, t2: term): term = TMopr("<=", mylist_pair(t1, t2))
+, t2: term): term =
+TMopr("<=", mylist_pair(t1, t2))
 fun
 TMgte
 ( t1: term
-, t2: term): term = TMopr(">=", mylist_pair(t1, t2))
-
+, t2: term): term =
+TMopr(">=", mylist_pair(t1, t2))
+//
 fun
 TMadd
 ( t1: term
-, t2: term): term = TMopr("+", mylist_pair(t1, t2))
+, t2: term): term =
+TMopr("+", mylist_pair(t1, t2))
 fun
 TMsub
 ( t1: term
-, t2: term): term = TMopr("-", mylist_pair(t1, t2))
+, t2: term): term =
+TMopr("-", mylist_pair(t1, t2))
 fun
 TMmul
 ( t1: term
-, t2: term): term = TMopr("*", mylist_pair(t1, t2))
-
+, t2: term): term =
+TMopr("*", mylist_pair(t1, t2))
+//
 (* ****** ****** *)
 //
 val test1 = println!
@@ -575,4 +582,4 @@ val () = println!
 
 (* ****** ****** *)
 
-(* end of [CS525-2022-Fall/lecture/lecture-09-21/lambda0.dats] *)
+(* end of [CS525-2022-Fall/lecture/lecture-09-27/lambda0.dats] *)
