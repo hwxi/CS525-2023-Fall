@@ -208,7 +208,7 @@ VALtup(v1, v2) =>
 fprint!(out, "VALtup(", v1, ";", v2, ")")
 |
 VALlam(t1, env) =>>
-fprint!(out, "VALbtf(", t1, ";", "...", ")")
+fprint!(out, "VALlam(", t1, ";", "...", ")")
 )
 //
 (* ****** ****** *)
