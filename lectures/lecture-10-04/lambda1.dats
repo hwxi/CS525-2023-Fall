@@ -45,7 +45,7 @@ fprint_val<term> = fprint_term
 overload print with print_term
 overload fprint with fprint_term
 (* ****** ****** *)
-
+//
 implement
 fprint_term
 (out, t0) =
@@ -73,7 +73,7 @@ fprint!(out, "TMopr(", nm, ";", ts, ")")
 TMif0(t1, t2, t3) =>
 fprint!(out, "TMif0(", t1, ";", t2, ";", t3, ")")
 )
-
+//
 (* ****** ****** *)
 
 datatype
