@@ -225,5 +225,124 @@ Some testing code will be given later.
 *)
 
 (* ****** ****** *)
+fun
+TMlt
+( t1: term
+, t2: term): term =
+TMopr("<", mylist_pair(t1, t2))
+fun
+TMgt
+( t1: term
+, t2: term): term =
+TMopr(">", mylist_pair(t1, t2))
+fun
+TMlte
+( t1: term
+, t2: term): term =
+TMopr("<=", mylist_pair(t1, t2))
+fun
+TMgte
+( t1: term
+, t2: term): term =
+TMopr(">=", mylist_pair(t1, t2))
+(* ****** ****** *)
+fun
+TMadd
+( t1: term
+, t2: term): term =
+TMopr("+", mylist_pair(t1, t2))
+fun
+TMsub
+( t1: term
+, t2: term): term =
+TMopr("-", mylist_pair(t1, t2))
+fun
+TMmul
+( t1: term
+, t2: term): term =
+TMopr("*", mylist_pair(t1, t2))
+(* ****** ****** *)
+
+(*
+Y' = λf·
+(λx· f (λy· x x y)) (λx· f (λy· x x y))
+*)
+val Y' =
+let
+val f = TMvar"f"
+and x = TMvar"x"
+and y = TMvar"y" in
+TMlam("f",
+TMapp(
+TMlam("x",
+TMapp(f,
+TMlam("y", TMapp(TMapp(x, x), y)))),
+TMlam("x",
+TMapp(f,
+TMlam("y", TMapp(TMapp(x, x), y)))))) end
+
+(* ****** ****** *)
+
+val
+TMfact = TMapp(Y', FACT) where
+{
+val FACT =
+let
+val f = TMvar"f"
+val x = TMvar"x" in
+TMlam("f",
+TMlam("x",
+TMif0(
+TMgte(x, TMint(1)),
+TMmul(x,
+TMapp(f,
+TMsub(x, TMint(1)))), TMint(1)))) end
+}
+
+(* ****** ****** *)
+
+val
+TMfibo = TMapp(Y', FIBO) where
+{
+val FIBO =
+let
+val f = TMvar"f"
+val x = TMvar"x" in
+TMlam("f",
+TMlam("x",
+TMif0(
+  TMgte(x, TMint(2)),
+  TMadd(
+  TMapp(f, TMsub(x, TMint(2))),
+  TMapp(f, TMsub(x, TMint(1)))), x))) end
+}
+
+(* ****** ****** *)
+
+fun
+assign03_compile_test1
+  ( (*void*) ) =
+let
+val
+Church_fact5 =
+assign03_compile
+(TMapp(TMfact, TMint(5))) in
+println!("assign03_compile_test1:");
+println!("Church_fact5 = ", Church_fact5) end
+
+(* ****** ****** *)
+
+fun
+assign03_compile_test2
+  ( (*void*) ) =
+let
+val
+Church_fibo5 =
+assign03_compile
+(TMapp(TMfibo, TMint(5))) in
+println!("assign03_compile_test2:");
+println!("Church_fibo5 = ", Church_fibo5) end
+
+(* ****** ****** *)
 
 (* end of [CS525-2023-Fall/assigns/assign03.dats] *)
