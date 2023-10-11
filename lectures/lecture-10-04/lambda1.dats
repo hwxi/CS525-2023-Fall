@@ -24,6 +24,16 @@ datatype term =
 //
 | TMif0 of (term, term, term)
 //
+|
+TMlet of
+( tvar(*x*)
+, term(*t1*), term(*t2*)) // let x = t1 in t2 end
+|
+TMfix of
+( tvar(*f*)
+, tvar(*x*), term(*body*)) // fix f(x) => body
+//
+//
 where termlst = mylist(term)
 //
 (* ****** ****** *)
@@ -66,12 +76,22 @@ fprint!(out, "TMlam(", v0, ";", t1, ")")
 |
 TMapp(t1, t2) =>
 fprint!(out, "TMapp(", t1, ";", t2, ")")
+//
 |
 TMopr(nm, ts) =>
 fprint!(out, "TMopr(", nm, ";", ts, ")")
 |
 TMif0(t1, t2, t3) =>
 fprint!(out, "TMif0(", t1, ";", t2, ";", t3, ")")
+//
+|
+TMlet(x, t1, t2) =>
+fprint!
+(out, "TMlet(", x, ";", t1, ";", t2, ")")
+|
+TMfix(f, x, tt) =>
+fprint!(out, "TMfix(", f, ";", x, ";", tt, ")")
+//
 )
 //
 (* ****** ****** *)
@@ -83,6 +103,7 @@ value =
 | VALbtf of bool
 //
 | VALlam of (term(*lam*), envir)
+| VALfix of (term(*fix*), envir)
 
 where envir = mylist(@(tvar, value))
 
@@ -124,7 +145,10 @@ VALbtf(b0) =>
 fprint!(out, "VALbtf(", b0, ")")
 |
 VALlam(t1, env) =>>
-fprint!(out, "VALbtf(", t1, ";", "...", ")")
+fprint!(out, "VALlam(", t1, ";", "...", ")")
+|
+VALfix(t1, env) =>>
+fprint!(out, "VALfix(", t1, ";", "...", ")")
 )
 //
 (* ****** ****** *)
@@ -170,6 +194,7 @@ TMint(i0) => VALint(i0)
 TMbtf(b0) => VALbtf(b0)
 //
 |TMlam _ => VALlam(t0, e0)
+|TMfix _ => VALfix(t0, e0)
 //
 |TMapp(t1, t2) =>
 let
@@ -186,6 +211,15 @@ val-TMlam(x1, tt) = t1
 in
 term_eval1
 (tt, mylist_cons((x1, v2), e1))
+end
+|
+VALfix(t1, e1) =>
+let
+val-
+TMfix(f1, x2, tt) = t1
+in
+term_eval1
+(tt, mylist_cons((f1, v1), mylist_cons((x2, v2), e1)))
 end
 end
 //
@@ -279,7 +313,6 @@ val () = println!("term_eval1: t0 = ", t0)
 //
 end // end of [TMopr(nm, ts)]
 //
-//
 |
 TMif0(t1, t2, t3) =>
 let
@@ -292,6 +325,14 @@ VALbtf(b1) =>
   if b1 then term_eval1(t2, e0)
         else term_eval1(t3, e0))
 end // let // end of [TMif0(...)]
+//
+|
+TMlet(x1, t1, t2) =>
+let
+val v1 = term_eval1(t1, e0)
+in
+term_eval1(t2, mylist_cons((x1, v1), e0))
+end
 //
 (*
 | _(*otherwise*) =>
@@ -458,6 +499,20 @@ TMapp(f, TMsub(x, TMint(1)))), x))) end
 (* ****** ****** *)
 
 val
+TMfibo' =
+let
+val f = TMvar"f"
+val x = TMvar"x" in
+TMfix("f", "x",
+TMif0(
+TMgte(x, TMint(2)),
+TMadd(
+TMapp(f, TMsub(x, TMint(2))),
+TMapp(f, TMsub(x, TMint(1)))), x)) end
+
+(* ****** ****** *)
+
+val
 VALfact5 =
 term_eval0(TMapp(TMfact, TMint(5)))
 val () = println!("VALfact5 = ", VALfact5)
@@ -477,9 +532,9 @@ VALfibo10 =
 term_eval0(TMapp(TMfibo, TMint(10)))
 val () = println!("VALfibo10 = ", VALfibo10)
 val
-VALfibo20 =
-term_eval0(TMapp(TMfibo, TMint(20)))
-val () = println!("VALfibo20 = ", VALfibo20)
+VALfibo10' =
+term_eval0(TMapp(TMfibo', TMint(10)))
+val () = println!("VALfibo10' = ", VALfibo10')
 
 (* ****** ****** *)
 
