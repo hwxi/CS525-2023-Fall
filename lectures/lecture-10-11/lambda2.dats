@@ -222,6 +222,10 @@ fun
 term_type1(term, tpctx): type
 extern
 fun
+term_type1_ck
+(t0: term, T0: type, ctx: tpctx): void
+extern
+fun
 termlst_type1
 (ts:termlst, e0:tpctx): typelst
 
@@ -234,7 +238,8 @@ tpctx_lookup(tpctx, tvar): type
 (* ****** ****** *)
 
 implement
-term_type1(t0, e0) =
+term_type1
+(t0, e0) =
 (
 case+ t0 of
 //
@@ -245,6 +250,50 @@ TMbtf(b0) => TPbtf
 |
 TMvar(x0) =>
 tpctx_lookup(e0, x0)
+//
+|
+TMapp(t1, t2) =>
+(
+  T12 ) where
+{
+val T1 =
+term_type1(t1, e0)
+val-
+TPfun(T11, T12) = T1
+val () =
+term_type1_ck(t1, T11, e0)
+}
+//
+|
+TMlam2
+(x0, Tx, tt) =>
+let
+val e1 =
+mylist_cons((x0, Tx), e0)
+in//let
+  TPfun(Tx, Tt) where
+{
+  val Tt = term_type1(tt, e1)
+}
+end//end-of-[TMlam2(x0,Tx,tt)]
+//
+|
+TMfix2
+(f0, x0, Tf, tt) =>
+let
+val-
+TPfun(Tx, Ty) = Tf
+val e1 =
+mylist_cons((x0, Tx), e0)
+val e2 =
+mylist_cons((f0, Tf), e0)
+in//let
+  Tf where
+{
+  val () =
+  term_type1_ck(tt, Ty, e2)
+}
+end//end-of-[TMlam2(x0,Tx,tt)]
 //
 | _(*unsupported*) =>
 (
