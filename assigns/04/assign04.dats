@@ -1,13 +1,35 @@
 (* ****** ****** *)
+(*
+Due: Wednesday, the 18th of October
+*)
+(* ****** ****** *)
+#include
+"share/atspre_staload.hats"
+(* ****** ****** *)
+#staload "./../../mylib/mylib.dats"
+(* ****** ****** *)
+(*
+implement main() = 0 // HX: this is a dummy
+*)
+(* ****** ****** *)
+(*
+//
+HX-2023-10-12: 50 points (Due: 2023-10-18)
+//
+Please study the code in lecture-10-11 and then
+copy/paste/modify it. Afterwards, please construct
+a type-checker of the following type:
+//
+extern fun assign03_tpcheck(t0: term): type
+//
+*)
+(* ****** ****** *)
 #include
 "share\
 /atspre_staload.hats"
 (* ****** ****** *)
 #staload
 "./../../mylib/mylib.dats"
-(* ****** ****** *)
-implement
-main0 = lam () => ()
 (* ****** ****** *)
 //
 typedef tbas = string
@@ -237,108 +259,4 @@ tpctx_lookup(tpctx, tvar): type
 
 (* ****** ****** *)
 
-implement
-term_type1
-(t0, e0) =
-(
-case+ t0 of
-//
-|
-TMint(i0) => TPint
-|
-TMbtf(b0) => TPbtf
-|
-TMstr(s0) => TPstr
-//
-|
-TMvar(x0) =>
-tpctx_lookup(e0, x0)
-//
-|
-TMapp(t1, t2) =>
-(
-  T12 ) where
-{
-val T1 =
-term_type1(t1, e0)
-val-
-TPfun(T11, T12) = T1
-val () =
-term_type1_ck(t1, T11, e0)
-}
-//
-|
-TMlam2
-(x0, Tx, tt) =>
-let
-val e1 =
-mylist_cons((x0, Tx), e0)
-in//let
-  TPfun(Tx, Tt) where
-{
-  val Tt = term_type1(tt, e1)
-}
-end//end-of-[TMlam2(x0,Tx,tt)]
-//
-|
-TMfix2
-(f0, x0, Tf, tt) =>
-let
-val-
-TPfun(Tx, Ty) = Tf
-val e1 =
-mylist_cons((x0, Tx), e0)
-val e2 =
-mylist_cons((f0, Tf), e0)
-in//let
-  Tf where
-{
-  val () =
-  term_type1_ck(tt, Ty, e2)
-}
-end//end-of-[TMlam2(x0,Tx,tt)]
-//
-| _(*unsupported*) =>
-(
-exit(1) ) where
-{
-val () =
-println!("term_type1: t0 = ", t0)
-}
-//
-) (* end-of-[term_type1(t0, e0)] *)
-
-(* ****** ****** *)
-
-implement
-tpctx_lookup
-(xts, x0) =
-(
-case+ xts of
-|
-mylist_nil() => exit(1) where
-{
-  val () = println!("tpctx_lookup: x0 = ", x0)
-}
-|
-mylist_cons(xt1, xts) =>
-if x0 = xt1.0 then xt1.1 else tpctx_lookup(xts, x0)
-)
-
-(* ****** ****** *)
-
-implement
-term_type1_ck
-(t0, Tt, ctx) =
-(
-assert(T0 = Tt)) where
-{
-val T0 = term_type1(t0, ctx)
-val () = println!("term_type1_ck: t0 = ", t0)
-val () = println!("term_type1_ck: T0 = ", T0)
-val () = println!("term_type1_ck: Tt = ", Tt)
-}
-
-(* ****** ****** *)
-
-(* end of [CS525-2022-Fall/lecture/lecture-10-11/lambda2.dats] *)
+(* end of [CS525-2023-Fall/assigns/assign04.dats] *)
