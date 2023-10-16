@@ -24,13 +24,6 @@ extern fun assign03_tpcheck(t0: term): type
 //
 *)
 (* ****** ****** *)
-#include
-"share\
-/atspre_staload.hats"
-(* ****** ****** *)
-#staload
-"./../../mylib/mylib.dats"
-(* ****** ****** *)
 //
 typedef tbas = string
 //
