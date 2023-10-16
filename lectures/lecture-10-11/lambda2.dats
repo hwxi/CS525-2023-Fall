@@ -289,7 +289,7 @@ TPfun(Tx, Ty) = Tf
 val e1 =
 mylist_cons((x0, Tx), e0)
 val e2 =
-mylist_cons((f0, Tf), e0)
+mylist_cons((f0, Tf), e1)
 in//let
   Tf where
 {
