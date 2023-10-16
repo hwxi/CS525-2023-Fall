@@ -251,5 +251,54 @@ fun
 tpctx_lookup(tpctx, tvar): type
 
 (* ****** ****** *)
+fun
+TMadd
+( x: term
+, y: term): term =
+TMopr("+", mylist_pair(x, y))
+fun
+TMsub
+( x: term
+, y: term): term =
+TMopr("-", mylist_pair(x, y))
+fun
+TMmul
+( x: term
+, y: term): term =
+TMopr("*", mylist_pair(x, y))
+(* ****** ****** *)
+fun
+TMlte
+( x: term
+, y: term): term =
+TMopr("<=", mylist_pair(x, y))
+fun
+TMgte
+( x: term
+, y: term): term =
+TMopr(">=", mylist_pair(x, y))
+(* ****** ****** *)
+//
+val
+TMfibo =
+let
+val f = TMvar"f"
+val x = TMvar"x" in
+TMfix2
+(
+"f", "x",
+TPfun(TPint, TPint),
+TMif0(
+  TMgte(x, TMint(2)),
+  TMadd(
+  TMapp(f, TMsub(x, TMint(2))),
+  TMapp(f, TMsub(x, TMint(1)))), x)) end
+//
+(* ****** ****** *)
+val TPfibo_type = term_type0(TMfibo)
+(* ****** ****** *)
+val ( (*void*) ) =
+println!("TPfibo_type = ", TPfibo_type)
+(* ****** ****** *)
 
 (* end of [CS525-2023-Fall/assigns/assign04.dats] *)

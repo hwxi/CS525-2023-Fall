@@ -264,7 +264,7 @@ term_type1(t1, e0)
 val-
 TPfun(T11, T12) = T1
 val () =
-term_type1_ck(t1, T11, e0)
+term_type1_ck(t2, T11, e0)
 }
 //
 |
