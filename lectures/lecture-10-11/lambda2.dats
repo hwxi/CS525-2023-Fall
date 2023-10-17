@@ -268,6 +268,21 @@ term_type1_ck(t2, T11, e0)
 }
 //
 |
+TMif0
+(t1, t2, t3) =>
+(
+  T2 ) where
+{
+val () =
+term_type1_ck
+(t1, TPbtf, e0)
+val T2 =
+term_type1(t2, e0)
+val () =
+term_type1_ck(t3, T2, e0)
+}
+//
+|
 TMlam2
 (x0, Tx, tt) =>
 let
