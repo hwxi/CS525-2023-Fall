@@ -19,10 +19,15 @@ datatype type =
 |
 TPbas of tbas // base types:
 // int, bool, float, string, etc
+//
+|
+TPxyz of
+ref(myoptn type) // existential
+//
 |
 TPfun of (type, type) // T1 -> T2
 |
-TPtup of (type, type) // T1 * T2
+TPtup of (type, type) // (T1 * T2)
 //
 (*
 | TPref of type
@@ -56,7 +61,6 @@ fprint_val<type> = fprint_type
 overload print with print_type
 overload fprint with fprint_type
 (* ****** ****** *)
-//
 implement
 fprint_type
 (out, tp) =
@@ -72,7 +76,6 @@ fprint!(out, "TPfun(", tp1, ";", tp2, ")")
 TPtup(tp1, tp2) =>
 fprint!(out, "TPtup(", tp1, ";", tp2, ")")
 )
-//
 (* ****** ****** *)
 //
 extern
@@ -129,10 +132,6 @@ datatype term =
 | TMlet of
 ( tvar(*x*)
 , term(*t1*), term(*t2*))
-//
-| TMfst of (term)
-| TMsnd of (term)
-| TMtup of (term, term)
 //
 | TMfix of
   (tvar(*f*), tvar(*x*), term)
@@ -204,18 +203,6 @@ fprint!
 TMlet(x, t1, t2) =>
 fprint!
 (out, "TMlet(", x, ";", t1, ";", t2, ")")
-//
-|
-TMfst(tt) =>
-fprint!(out, "TMfst(", tt, ")")
-|
-TMsnd(tt) =>
-fprint!(out, "TMsnd(", tt, ")")
-|
-TMtup(t1, t2) =>
-(
- fprint!(out, "TMtup(", t1, ";", t2, ")"))
-//
 |
 TMfix(f, x, tt) =>
 fprint!(out, "TMfix(", f, ";", x, ";", tt, ")")
@@ -272,6 +259,34 @@ TMvar(x0) =>
 tpctx_lookup(c0, x0)
 //
 |
+TMlam(x1, tt) =>
+let
+val X1 =
+ref(myoptn_nil)
+val c1 =
+mylist_cons((x1, X1), c0)
+in
+TPfun
+(X1, term_type1(tt, c1))
+end
+|
+TMfix
+(f0, x1, tt) =>
+let
+val X1 =
+ref(myoptn_nil)
+val X2 =
+ref(myoptn_nil)
+val F0 = TPfun(X1, X2)
+val c1 =
+mylist_cons((x1, X1), c0)
+val c2 =
+mylist_cons((f0, F0), c1)
+in
+term_typ1_ck(tt, X2, c2); F0
+end
+//
+|
 TMapp(t1, t2) =>
 (
   T12 ) where
@@ -299,6 +314,15 @@ val () =
 term_type1_ck(t3, T2, c0)
 }
 //
+|
+TMtup
+(t1, t2) =>
+TPtup(T1, T2) where
+{
+val T1 = term_type1(t1, c0)
+val T2 = term_type1(t2, c0)
+}
+//
 |TMfst(tt) =>
 let
 val-
@@ -308,24 +332,16 @@ term_type1(tt, c0) in T1 end
 |TMsnd(tt) =>
 let
 val-
-TPtup(_, T2) =
+TPtup(T1, T2) =
 term_type1(tt, c0) in T2 end
-//
-|
-TMtup
-(t1, t2) =>
-TPtup(T1, T2) where
-{
-val T1 = term_type1(t1, c0)
-val T2 = term_type1(t2, c0) }
 //
 |
 TMlet
 (x1, t1, t2) =>
 (
-term_type1(t2, c1)) where
+term_typ1(t2, c1)) where
 { val T1 =
-  term_type1(t1, c0)
+  term_typ1(t1, c0)
   val c1 =
   mylist_cons((x1, T1), c0) }
 //

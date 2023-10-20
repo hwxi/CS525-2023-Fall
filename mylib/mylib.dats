@@ -9,6 +9,13 @@ for BU CAS CS 525 (2023F)
 (* ****** ****** *)
 //
 datatype
+myoptn(a:t@ype) =
+| myoptn_nil of ()
+| myoptn_cons of (a)
+//
+(* ****** ****** *)
+//
+datatype
 mylist(a:t@ype) =
 | mylist_nil of ()
 | mylist_cons of (a, mylist(a))
