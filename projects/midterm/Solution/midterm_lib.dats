@@ -31,6 +31,11 @@ val TM_foreach_to_forall: term
 extern
 val TM_foreach_to_get_at: term
 //
+extern
+val TM_foreach_to_foldleft: term
+extern
+val TM_foreach_to_foldright: term
+//
 (* ****** ****** *)
 
 (* end of [CS525-2022-Fall/projects/midterm/Solution/midterm_lib.dats] *)
