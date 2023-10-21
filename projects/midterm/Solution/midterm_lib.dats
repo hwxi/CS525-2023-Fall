@@ -24,12 +24,34 @@ extern
 val TM_list_foreach: term
 //
 (* ****** ****** *)
+
+extern
+val TM_str_make_fwork: term
+extern
+val TM_list_make_fwork: term
+
+(* ****** ****** *)
+//
+extern
+val TM_listize: term
+extern
+val TM_rlistize: term
+//
+extern
+val TM_streamize: term
+extern
+val TM_stream_to_foreach: term
+//
+(* ****** ****** *)
 //
 extern
 val TM_foreach_to_forall: term
 //
 extern
 val TM_foreach_to_get_at: term
+//
+extern
+val TM_foreach_to_map_list: term
 //
 extern
 val TM_foreach_to_foldleft: term
