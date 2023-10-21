@@ -19,10 +19,8 @@ datatype type =
 |
 TPbas of tbas // base types:
 // int, bool, float, string, etc
-//
 |
-TPxyz of
-ref(myoptn type) // existential
+TPxyz of txyz
 //
 |
 TPfun of (type, type) // T1 -> T2
@@ -36,12 +34,27 @@ TPtup of (type, type) // (T1 * T2)
 | TPllist of type // for lazy lists
 *)
 //
-where typelst = mylist(type)
+where
+typelst = mylist(type)
+and
+typeopt = myoptn(type)
+//
+and txyz = ref(typeopt)
+//
+(* ****** ****** *)
 //
 (* ****** ****** *)
 val TPint = TPbas("int")
 val TPbtf = TPbas("bool")
 val TPstr = TPbas("string")
+(* ****** ****** *)
+extern
+fun
+tpxyz_new(): type
+(* ****** ****** *)
+implement
+tpxyz_new() =
+TPxyz(ref(myoptn_nil()))
 (* ****** ****** *)
 extern
 fun
@@ -61,6 +74,7 @@ fprint_val<type> = fprint_type
 overload print with print_type
 overload fprint with fprint_type
 (* ****** ****** *)
+//
 implement
 fprint_type
 (out, tp) =
@@ -69,6 +83,11 @@ case+ tp of
 |
 TPbas(nm) =>
 fprint!(out, "TPbas(", nm, ")")
+//
+|
+TPxyz(r0) =>
+fprint!(out, "TPxyz(", !r0, ")")
+//
 |
 TPfun(tp1, tp2) =>
 fprint!(out, "TPfun(", tp1, ";", tp2, ")")
@@ -76,39 +95,110 @@ fprint!(out, "TPfun(", tp1, ";", tp2, ")")
 TPtup(tp1, tp2) =>
 fprint!(out, "TPtup(", tp1, ";", tp2, ")")
 )
+//
 (* ****** ****** *)
 //
 extern
 fun
-type_equal
-(t1: type, t2: type): bool
-overload = with type_equal
+type_norm(type): type
+//
+(* ****** ****** *)
+//
+extern
+fun
+txyz_solve
+(r1: txyz, T2: type): bool
+//
+extern
+fun
+type_unify
+(tp1: type, tp2: type): bool
+overload unify with type_unify
 //
 (* ****** ****** *)
 //
 implement
-type_equal
-( t1, t2 ) =
+type_unify
+( T1, T2 ) =
+let
+//
+val T1 = type_norm(T1)
+val T2 = type_norm(T2)
+//
+in
+  f0_helper1(T1, T2) end
+where
+{
+//
+fun
+f0_helper1
+( T1: type
+, T2: type): bool =
 (
-case+ t1 of
+case+ T1 of
+|
+TPxyz(r1) =>
+(
+case+ T2 of
+|
+TPxyz(r2) =>
+if
+(r1 = r2)
+then true else txyz_solve(r1, T2)
+|
+_(*non-TPxyz*) => txyz_solve(r1, T2))
+|
+_(*non-TPxyz*) =>
+(
+case+ T2 of
+| TPxyz(r2) => txyz_solve(r2, T1)
+| _(*non-TPxyz*) => f0_helper2(T1, T2))
+)
+//
+and
+f0_helper2
+( T1: type
+, T2: type): bool =
+(
+case+ T1 of
 |
 TPbas(nm1) =>
-(case+ t2 of
+(case+ T2 of
+//
 |
-TPbas(nm2) => (nm1 = nm2) | _ => false)
+TPbas(nm2) =>
+(nm1 = nm2) | _ => false)
+//
 |
-TPfun(t11, t12) =>
-(case+ t2 of
+TPxyz( _ ) =>
+exit(1) where
+{
+val () =
+println!
+("type_unify: f0_helper2: T1 = ", T1) }
+//
 |
-TPfun(t21, t22) =>
-( t11 = t21 && t12 = t22 ) | _ => false)
+TPfun(T11, T12) =>
+(case+ T2 of
 |
-TPtup(t11, t12) =>
-(case+ t2 of
+TPfun(T21, T22) =>
+(
+unify(T11, T21)
+&&
+unify(T12, T22)) | _(*non-TPtup*) => false)
+//
 |
-TPtup(t21, t22) =>
-( t11 = t21 && t12 = t22 ) | _ => false)
+TPtup(T11, T12) =>
+(case+ T2 of
+|
+TPtup(T21, T22) =>
+(
+unify(T11, T21)
+&&
+unify(T12, T22)) | _(*non-TPtup*) => false)
+//
 )
+}
 //
 (* ****** ****** *)
 typedef tvar = string
@@ -133,13 +223,17 @@ datatype term =
 ( tvar(*x*)
 , term(*t1*), term(*t2*))
 //
+| TMfst of (term)
+| TMsnd of (term)
+| TMtup of (term, term)
+//
 | TMfix of
-  (tvar(*f*), tvar(*x*), term)
+  (tvar(*f0*), tvar(*x1*), term)
 //
 | TMlam2 of
   (tvar, type, term)
 | TMfix2 of
-  (tvar(*f*), tvar(*x*), type, term)
+  (tvar(*f0*), tvar(*x1*), type, term)
 //
 where termlst = mylist(term)
 //
@@ -182,11 +276,11 @@ fprint!(out, "TMbtf(", b0, ")")
 TMstr(s0) =>
 fprint!(out, "TMstr(", s0, ")")
 |
-TMvar(v0) =>
-fprint!(out, "TMvar(", v0, ")")
+TMvar(x0) =>
+fprint!(out, "TMvar(", x0, ")")
 |
-TMlam(v0, t1) =>
-fprint!(out, "TMlam(", v0, ";", t1, ")")
+TMlam(x0, t1) =>
+fprint!(out, "TMlam(", x0, ";", t1, ")")
 |
 TMapp(t1, t2) =>
 fprint!(out, "TMapp(", t1, ";", t2, ")")
@@ -200,9 +294,21 @@ fprint!
 (out, "TMif0(", t1, ";", t2, ";", t3, ")")
 //
 |
-TMlet(x, t1, t2) =>
+TMlet(x1, t1, t2) =>
 fprint!
-(out, "TMlet(", x, ";", t1, ";", t2, ")")
+(out, "TMlet(", x1, ";", t1, ";", t2, ")")
+//
+|
+TMfst(tt) =>
+fprint!(out, "TMfst(", tt, ")")
+|
+TMsnd(tt) =>
+fprint!(out, "TMsnd(", tt, ")")
+|
+TMtup(t1, t2) =>
+(
+ fprint!(out, "TMtup(", t1, ";", t2, ")"))
+//
 |
 TMfix(f, x, tt) =>
 fprint!(out, "TMfix(", f, ";", x, ";", tt, ")")
@@ -259,32 +365,17 @@ TMvar(x0) =>
 tpctx_lookup(c0, x0)
 //
 |
-TMlam(x1, tt) =>
+TMlam(x0, tt) =>
 let
-val X1 =
-ref(myoptn_nil)
+val Tx = tpxyz_new()
 val c1 =
-mylist_cons((x1, X1), c0)
-in
-TPfun
-(X1, term_type1(tt, c1))
-end
-|
-TMfix
-(f0, x1, tt) =>
-let
-val X1 =
-ref(myoptn_nil)
-val X2 =
-ref(myoptn_nil)
-val F0 = TPfun(X1, X2)
-val c1 =
-mylist_cons((x1, X1), c0)
-val c2 =
-mylist_cons((f0, F0), c1)
-in
-term_typ1_ck(tt, X2, c2); F0
-end
+mylist_cons((x0, Tx), c0)
+in//let
+  TPfun(Tx, Tt) where
+{
+  val Tt = term_type1(tt, c1)
+}
+end//end-of-[TMlam2(x0,Tx,tt)]
 //
 |
 TMapp(t1, t2) =>
@@ -314,15 +405,6 @@ val () =
 term_type1_ck(t3, T2, c0)
 }
 //
-|
-TMtup
-(t1, t2) =>
-TPtup(T1, T2) where
-{
-val T1 = term_type1(t1, c0)
-val T2 = term_type1(t2, c0)
-}
-//
 |TMfst(tt) =>
 let
 val-
@@ -332,18 +414,47 @@ term_type1(tt, c0) in T1 end
 |TMsnd(tt) =>
 let
 val-
-TPtup(T1, T2) =
+TPtup(_, T2) =
 term_type1(tt, c0) in T2 end
+//
+|
+TMtup
+(t1, t2) =>
+TPtup(T1, T2) where
+{
+val T1 = term_type1(t1, c0)
+val T2 = term_type1(t2, c0) }
 //
 |
 TMlet
 (x1, t1, t2) =>
 (
-term_typ1(t2, c1)) where
+term_type1(t2, c1)) where
 { val T1 =
-  term_typ1(t1, c0)
+  term_type1(t1, c0)
   val c1 =
   mylist_cons((x1, T1), c0) }
+//
+|
+TMfix
+(f0, x0, tt) =>
+let
+//
+val Tx = tpxyz_new()
+val Ty = tpxyz_new()
+val Tf = TPfun(Tx, Ty)
+//
+val c1 =
+mylist_cons((x0, Tx), c0)
+val c2 =
+mylist_cons((f0, Tf), c1)
+in//let
+  Tf where
+{
+  val () =
+  term_type1_ck(tt, Ty, c2)
+}
+end//end-of-[TMfix(f0,x0,tt)]
 //
 |
 TMlam2
@@ -374,7 +485,7 @@ in//let
   val () =
   term_type1_ck(tt, Ty, c2)
 }
-end//end-of-[TMlam2(x0,Tx,tt)]
+end//end-of-[TMfix2(x0,Tx,tt)]
 //
 | _(*unsupported*) =>
 (
@@ -408,8 +519,8 @@ if x0 = xt1.0 then xt1.1 else tpctx_lookup(xts, x0)
 implement
 term_type1_ck
 (t0, Tt, ctx) =
-(
-assert(T0 = Tt)) where
+assert
+(unify(T0, Tt)) where
 {
 val T0 = term_type1(t0, ctx)
 val () = println!("term_type1_ck: t0 = ", t0)

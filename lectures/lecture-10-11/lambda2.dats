@@ -59,18 +59,18 @@ overload fprint with fprint_type
 //
 implement
 fprint_type
-(out, tp) =
+(out, T0) =
 (
-case+ tp of
+case+ T0 of
 |
 TPbas(nm) =>
 fprint!(out, "TPbas(", nm, ")")
 |
-TPfun(tp1, tp2) =>
-fprint!(out, "TPfun(", tp1, ";", tp2, ")")
+TPfun(T1, T2) =>
+fprint!(out, "TPfun(", T1, ";", T2, ")")
 |
-TPtup(tp1, tp2) =>
-fprint!(out, "TPtup(", tp1, ";", tp2, ")")
+TPtup(T1, T2) =>
+fprint!(out, "TPtup(", T1, ";", T2, ")")
 )
 //
 (* ****** ****** *)
@@ -78,33 +78,33 @@ fprint!(out, "TPtup(", tp1, ";", tp2, ")")
 extern
 fun
 type_equal
-(t1: type, t2: type): bool
+(T1: type, T2: type): bool
 overload = with type_equal
 //
 (* ****** ****** *)
 //
 implement
 type_equal
-( t1, t2 ) =
+( T1, T2 ) =
 (
-case+ t1 of
+case+ T1 of
 |
 TPbas(nm1) =>
-(case+ t2 of
+(case+ T2 of
 |
 TPbas(nm2) => (nm1 = nm2) | _ => false)
 |
-TPfun(t11, t12) =>
-(case+ t2 of
+TPfun(T11, T12) =>
+(case+ T2 of
 |
-TPfun(t21, t22) =>
-( t11 = t21 && t12 = t22 ) | _ => false)
+TPfun(T21, T22) =>
+( T11 = T21 && T12 = T22 ) | _ => false)
 |
-TPtup(t11, t12) =>
-(case+ t2 of
+TPtup(T11, T12) =>
+(case+ T2 of
 |
-TPtup(t21, t22) =>
-( t11 = t21 && t12 = t22 ) | _ => false)
+TPtup(T21, T22) =>
+( T11 = T21 && T12 = T22 ) | _ => false)
 )
 //
 (* ****** ****** *)
