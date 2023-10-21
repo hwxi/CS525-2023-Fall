@@ -163,7 +163,10 @@ fprint!(out, "VALfix(", "...", ")")
 (* ****** ****** *)
 #include "./midterm_eval.dats"
 (* ****** ****** *)
-#include "./midterm_test.dats"
+#include "./midterm_lib0.dats"
+(* ****** ****** *)
+(* ****** ****** *)
+#include "./midterm_test.hats"
 (* ****** ****** *)
 (* ****** ****** *)
 
@@ -234,6 +237,34 @@ term_eval0
 println!("VALfact2_10 = ", VALfact2_10) end
 //
 end with ~TypeError() => println!("TPfact2: type error!")
+//
+(* ****** ****** *)
+//
+val () =
+try
+let
+val
+TPint_forall =
+term_type0(TMint_forall)
+in//let
+println!
+("TPint_forall = ", TPint_forall)
+end // end-of-let
+with ~TypeError() => println!("TPint_forall: type error!")
+//
+(* ****** ****** *)
+//
+val () =
+try
+let
+val
+TPstr_forall =
+term_type0(TMstr_forall)
+in//let
+println!
+("TPstr_forall = ", TPstr_forall)
+end // end-of-let
+with ~TypeError() => println!("TPstr_forall: type error!")
 //
 (* ****** ****** *)
 

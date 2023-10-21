@@ -17,7 +17,9 @@ CS525-2023-Fall: midterm
 (* ****** ****** *)
 exception TypeError of ()
 (* ****** ****** *)
+val TPnil = TPbas("nil")
 val TPint = TPbas("int")
+val TPchr = TPbas("char")
 val TPbtf = TPbas("bool")
 val TPstr = TPbas("string")
 (* ****** ****** *)
@@ -378,13 +380,36 @@ term_type1_ck(t1, TPint, c0)
 val () =
 term_type1_ck(t2, TPint, c0) }
 //
+(* ****** ****** *)
+//
+|
+"str_len" => TPint where
+{
+val-
+mylist_cons(t1, ts) = ts
+val () =
+term_type1_ck(t1, TPstr, c0) }
+//
+|
+"str_get_at" => TPchr where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPstr, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+(* ****** ****** *)
+//
 | _(*unsupported*) =>
 (
 exit(1) ) where
 {
 val () =
-println!
-("term_type1:TMopr:t0 = ", t0)
+println!("term_type1:TMopr:t0 = ", t0)
 }
 //
 ) (*case+*)//end-of-[TMopr(nm,ts)]
