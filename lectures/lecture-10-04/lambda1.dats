@@ -403,6 +403,8 @@ TMgte
 , t2: term): term =
 TMopr(">=", mylist_pair(t1, t2))
 
+(* ****** ****** *)
+
 fun
 TMadd
 ( t1: term

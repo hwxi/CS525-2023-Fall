@@ -402,8 +402,16 @@ tpctx_lookup(tpctx, tvar): type
 (* ****** ****** *)
 
 implement
+term_type0
+ (  t0  ) =
 term_type1
-(t0, c0) =
+(t0, mylist_nil(*void*))
+
+(* ****** ****** *)
+
+implement
+term_type1
+ (t0, c0) =
 (
 case+ t0 of
 //
@@ -443,6 +451,120 @@ TPfun(T11, T12) = T1
 val () =
 term_type1_ck(t2, T11, c0)
 }
+//
+|
+TMopr(nm, ts) =>
+(
+case+ nm of
+//
+| ">" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| "<" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| ">=" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| "<=" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| "+" => TPint where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| "-" => TPint where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| "*" => TPint where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| "/" => TPint where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| "%" => TPint where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| _(*unsupported*) =>
+(
+exit(1) ) where
+{
+val () =
+println!("term_type1: t0 = ", t0)
+}
+//
+) (* end of [TMopr(nm, ts)] *)
 //
 |
 TMif0
@@ -541,6 +663,7 @@ in//let
 }
 end//end-of-[TMfix2(x0,Tx,tt)]
 //
+(*
 | _(*unsupported*) =>
 (
 exit(1) ) where
@@ -548,6 +671,7 @@ exit(1) ) where
 val () =
 println!("term_type1: t0 = ", t0)
 }
+*)
 //
 ) (* end-of-[term_type1(t0, c0)] *)
 
@@ -581,6 +705,76 @@ val () = println!("term_type1_ck: t0 = ", t0)
 val () = println!("term_type1_ck: T0 = ", T0)
 val () = println!("term_type1_ck: Tt = ", Tt)
 }
+
+(* ****** ****** *)
+
+fun
+TMlt
+( t1: term
+, t2: term): term =
+TMopr("<", mylist_pair(t1, t2))
+fun
+TMgt
+( t1: term
+, t2: term): term =
+TMopr(">", mylist_pair(t1, t2))
+fun
+TMlte
+( t1: term
+, t2: term): term =
+TMopr("<=", mylist_pair(t1, t2))
+fun
+TMgte
+( t1: term
+, t2: term): term =
+TMopr(">=", mylist_pair(t1, t2))
+
+(* ****** ****** *)
+
+fun
+TMadd
+( t1: term
+, t2: term): term =
+TMopr("+", mylist_pair(t1, t2))
+fun
+TMsub
+( t1: term
+, t2: term): term =
+TMopr("-", mylist_pair(t1, t2))
+fun
+TMmul
+( t1: term
+, t2: term): term =
+TMopr("*", mylist_pair(t1, t2))
+fun
+TMdiv
+( t1: term
+, t2: term): term =
+TMopr("/", mylist_pair(t1, t2))
+fun
+TMmod
+( t1: term
+, t2: term): term =
+TMopr("%", mylist_pair(t1, t2))
+
+(* ****** ****** *)
+
+val
+TMfibo =
+let
+val f = TMvar"f"
+val x = TMvar"x" in
+TMfix("f", "x",
+TMif0(
+TMgte(x, TMint(2)),
+TMadd(
+TMapp(f, TMsub(x, TMint(2))),
+TMapp(f, TMsub(x, TMint(1)))), x)) end
+
+(* ****** ****** *)
+
+val TPfibo = term_type0(TMfibo)
+val (    ) = println!("TPfibo = ", TPfibo)
 
 (* ****** ****** *)
 
