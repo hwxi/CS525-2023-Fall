@@ -17,67 +17,6 @@ CS525-2023-Fall: midterm
 (* ****** ****** *)
 implement main0() = ((*void*))
 (* ****** ****** *)
-fun
-TMlt
-( t1: term
-, t2: term): term =
-TMopr("<", mylist_pair(t1, t2))
-fun
-TMgt
-( t1: term
-, t2: term): term =
-TMopr(">", mylist_pair(t1, t2))
-fun
-TMlte
-( t1: term
-, t2: term): term =
-TMopr("<=", mylist_pair(t1, t2))
-fun
-TMgte
-( t1: term
-, t2: term): term =
-TMopr(">=", mylist_pair(t1, t2))
-(* ****** ****** *)
-fun
-TMadd
-( t1: term
-, t2: term): term =
-TMopr("+", mylist_pair(t1, t2))
-fun
-TMsub
-( t1: term
-, t2: term): term =
-TMopr("-", mylist_pair(t1, t2))
-fun
-TMmul
-( t1: term
-, t2: term): term =
-TMopr("*", mylist_pair(t1, t2))
-fun
-TMdiv
-( t1: term
-, t2: term): term =
-TMopr("/", mylist_pair(t1, t2))
-fun
-TMmod
-( t1: term
-, t2: term): term =
-TMopr("%", mylist_pair(t1, t2))
-(* ****** ****** *)
-
-val
-TMfact =
-let
-val f = TMvar"f"
-val x = TMvar"x" in
-TMfix("f", "x",
-TMif0(
-TMlte(x, TMint(0)),
-TMint(1),
-TMmul(
-x, TMapp(f, TMsub(x, TMint(1)))))) end
-
-(* ****** ****** *)
 (* ****** ****** *)
 implement
 print_type(tp) =
@@ -219,25 +158,13 @@ fprint!(out, "VALfix(", "...", ")")
 ) (*case+*) // end of [fprint_value(out, v0)]
 //
 (* ****** ****** *)
-
-val
-TMfibo =
-let
-val f = TMvar"f"
-val x = TMvar"x" in
-TMfix("f", "x",
-TMif0(
-TMgte(x, TMint(2)),
-TMadd(
-TMapp(f, TMsub(x, TMint(2))),
-TMapp(f, TMsub(x, TMint(1)))), x)) end
-
 (* ****** ****** *)
-(* ****** ****** *)
-
 #include "./midterm_tpck.dats"
+(* ****** ****** *)
 #include "./midterm_eval.dats"
-
+(* ****** ****** *)
+#include "./midterm_test.dats"
+(* ****** ****** *)
 (* ****** ****** *)
 
 val () =
@@ -262,7 +189,12 @@ val
 TPfact =
 term_type0(TMfact)
 in
-println!("TPfact = ", TPfact)
+println!("TPfact = ", TPfact);
+let
+val VALfact_10 =
+term_eval0
+(TMapp(TMfact, TMint(10))) in
+println!("VALfact_10 = ", VALfact_10) end
 end with ~TypeError() => println!("TPfact: type error!")
 
 (* ****** ****** *)
@@ -275,32 +207,13 @@ TPfibo =
 term_type0(TMfibo)
 in
 println!
-("TPfibo = ", TPfibo)
-end with ~TypeError() => println!("TPfibo: type error!")
-
-(* ****** ****** *)
-
-val
-TMfact2 =
+("TPfibo = ", TPfibo);
 let
-val f = TMvar"f"
-val x = TMvar"x"
-//
-val ir = TMvar"ir"
-val i0 = TMfst(ir)
-val i1 = TMvar"i1"
-val r0 = TMsnd(ir) in
-//
-TMlam("x",
-TMapp(
-TMfix("f", "ir",
-TMif0(
-TMgte(i0, x), r0,
-TMlet("i1",
-TMadd
-(i0, TMint(1)), TMapp(f, TMtup(i1, TMmul(i1, r0)))))),
-TMtup(TMint(0), TMint(1))))
-end // end of [TMfact2]
+val VALfibo_10 =
+term_eval0
+(TMapp(TMfibo, TMint(10))) in
+println!("VALfibo_10 = ", VALfibo_10) end
+end with ~TypeError() => println!("TPfibo: type error!")
 
 (* ****** ****** *)
 //

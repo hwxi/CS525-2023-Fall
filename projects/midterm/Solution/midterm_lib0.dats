@@ -17,11 +17,11 @@ CS525-2023-Fall: midterm
 (* ****** ****** *)
 //
 extern
-val TM_int_foreach: term
+val TM_int_forall: term
 extern
-val TM_str_foreach: term
+val TM_str_forall: term
 extern
-val TM_list_foreach: term
+val TM_list_forall: term
 //
 (* ****** ****** *)
 
@@ -39,19 +39,20 @@ val TM_rlistize: term
 //
 extern
 val TM_streamize: term
-extern
-val TM_stream_to_foreach: term
 //
 (* ****** ****** *)
 //
 extern
-val TM_foreach_to_forall: term
-//
+val TM_forall_to_get_at: term
 extern
-val TM_foreach_to_get_at: term
+val TM_forall_to_foreach_at: term
+//
+(* ****** ****** *)
 //
 extern
 val TM_foreach_to_map_list: term
+//
+(* ****** ****** *)
 //
 extern
 val TM_foreach_to_foldleft: term
