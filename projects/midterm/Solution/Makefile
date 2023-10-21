@@ -4,24 +4,24 @@ MYATSCC=myatscc
 ######
 all::
 all:: \
-midterm_sol_dats
+midterm_main_dats
 ######
 test:: \
-midterm_sol_dats; ./$<
+midterm_main_dats; ./$<
 ######
-# midterm_sol_dats: \
-# midterm_sol.dats; \
-# $(MYATSCC) midterm_sol.dats
+# midterm_main_dats: \
+# midterm_main.dats; \
+# $(MYATSCC) midterm_main.dats
 ######
-midterm_sol_dats: \
-midterm_sol.dats; \
+midterm_main_dats: \
+midterm_main.dats; \
 $(PATSCC) -O2 -D_GNU_SOURCE -DATS_MEMALLOC_GCBDW -o $@ $< -lgc
 ######
 clean:: ; rm -f *~
 ######
 cleanall:: clean
-cleanall:: ; rm -f midterm_sol_dats
-cleanall:: ; rm -f midterm_sol_dats.c
+cleanall:: ; rm -f midterm_main_dats
+cleanall:: ; rm -f midterm_main_dats.c
 ######
 
 ############ end of [Makefile] ############

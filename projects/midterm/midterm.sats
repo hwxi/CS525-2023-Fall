@@ -111,6 +111,41 @@ overload print with print_term
 overload fprint with fprint_term
 (* ****** ****** *)
 //
+datatype
+value =
+//
+|
+VALint of int
+|
+VALbtf of bool
+|
+VALstr of string
+//
+|
+VALtup of (value, value)
+//
+|
+VALlam of (term(*lam*), envir)
+|
+VALfix of (term(*fix*), envir)
+//
+where envir = mylist(@(tvar, value))
+//
+(* ****** ****** *)
+
+typedef valuelst = mylist(value)
+
+(* ****** ****** *)
+fun
+print_value(v0:value): void
+fun
+fprint_value
+(out:FILEref, v0:value): void
+(* ****** ****** *)
+overload print with print_value
+overload fprint with fprint_value
+(* ****** ****** *)
+//
 fun
 term_type0(term): type
 fun
@@ -122,10 +157,21 @@ fun
 termlst_type1(termlst, tpctx): typelst
 //
 (* ****** ****** *)
-
+fun tpctx_lookup(tpctx, tvar): type
+(* ****** ****** *)
+(* ****** ****** *)
+//
 fun
-tpctx_lookup(tpctx, tvar): type
-
+term_eval0(term): value
+fun
+term_eval1(term, envir): value
+fun
+termlst_eval1(termlst, envir): valuelst
+//
+(* ****** ****** *)
+//
+fun envir_lookup(envir, tvar): value
+//
 (* ****** ****** *)
 
 (* end of [CS525-2022-Fall/exams/midterm/midterm.sats] *)
