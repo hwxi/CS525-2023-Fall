@@ -104,6 +104,25 @@ type_norm(type): type
 //
 (* ****** ****** *)
 //
+implement
+type_norm(T0) =
+(
+case+ T0 of
+|
+TPxyz(r1) =>
+(
+case+ !r1 of
+|
+myoptn_cons
+(    T1    ) =>
+type_norm(T1) // chasing
+|
+_(*unsolved*) => (  T0  ))
+|
+_(* non-TPxyz *) => ( T0 ))
+//
+(* ****** ****** *)
+//
 extern
 fun
 txyz_solve
