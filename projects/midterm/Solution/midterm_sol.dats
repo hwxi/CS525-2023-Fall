@@ -761,8 +761,7 @@ val
 TPfact =
 term_type0(TMfact)
 in
-println!
-("TPfact = ", TPfact)
+println!("TPfact = ", TPfact)
 end with ~TypeError() => println!("TPfact: type error!")
 
 (* ****** ****** *)
@@ -795,7 +794,9 @@ TMlam("x",
 TMapp(
 TMfix("f", "ir",
 TMif0(
-TMgte(i0, x), r0, TMlet("i1", TMadd(i0, TMint(1)), TMapp(f, TMtup(i1, TMmul(i1, r0)))))),
+TMgte(i0, x), r0,
+TMlet("i1",
+TMadd(i0, TMint(1)), TMapp(f, TMtup(i1, TMmul(i1, r0)))))),
 TMtup(TMint(0), TMint(1))))
 end // end of [TMfact2]
 
@@ -808,8 +809,7 @@ val
 TPfact2 =
 term_type0(TMfact2)
 in
-println!
-("TPfact2 = ", TPfact2)
+println!("TPfact2 = ", TPfact2)
 end with ~TypeError() => println!("TPfact2: type error!")
 
 (* ****** ****** *)
