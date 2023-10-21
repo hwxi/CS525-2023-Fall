@@ -15,6 +15,7 @@ CS525-2023-Fall: midterm
 #staload
 "./../../../mylib/mylib.dats"
 (* ****** ****** *)
+val TPnil = TPbas("nil")
 val TPint = TPbas("int")
 val TPchr = TPbas("char")
 val TPbtf = TPbas("bool")
@@ -22,6 +23,16 @@ val TPstr = TPbas("string")
 (* ****** ****** *)
 val TMtrue = TMbtf(true)
 val TMfalse = TMbtf(false)
+(* ****** ****** *)
+fun
+TMprchr(t1: term) =
+TMopr("prchr", mylist_sing(t1))
+fun
+TMprint(t1: term) =
+TMopr("print", mylist_sing(t1))
+fun
+TMprstr(t1: term) =
+TMopr("prstr", mylist_sing(t1))
 (* ****** ****** *)
 //
 fun
@@ -102,6 +113,26 @@ TMstr_get_at
 TMopr("str_get_at", mylist_pair(cs, i0))
 (* ****** ****** *)
 //
+fun
+TMseq
+( t1: term
+, t2: term): term =
+TMlet("", TManno(t1, TPnil), t2)
+fun
+TMseq2
+( t1: term
+, t2: term): term = TMseq(t1, t2)
+fun
+TMseq3
+( t1: term
+, t2: term
+, t3: term): term = TMseq(t1, TMseq(t2, t3))
+//
+(* ****** ****** *)
+fun
+TMignr(t1: term) = TMlet("", t1, TMnil(*con*))
+(* ****** ****** *)
+//
 extern
 val TMint_forall: term
 extern
@@ -129,21 +160,21 @@ val TMstreamize: term
 (* ****** ****** *)
 //
 extern
-val TMforall_to_get_at: term
+val TMforall_get_at: term
 extern
-val TMforall_to_foreach_at: term
+val TMforall_foreach_at: term
 //
 (* ****** ****** *)
 //
 extern
-val TMforeach_to_map_list: term
+val TMforeach_map_list: term
 //
 (* ****** ****** *)
 //
 extern
-val TMforeach_to_foldleft: term
+val TMforeach_foldleft: term
 extern
-val TMforeach_to_foldright: term
+val TMforeach_foldright: term
 //
 (* ****** ****** *)
 (* ****** ****** *)
@@ -184,11 +215,35 @@ val cs = TMvar"cs"
 val i0 = TMvar"i0"
 val test = TMvar"test"
 in//let
-TMlam2("cs", TPstr,
-TMlam2("test", TPfun(TPchr, TPbtf),
-TMapp(TMapp(TMint_forall, TMstr_len(cs)), TMlam("i0", TMapp(test, TMstr_get_at(cs, i0))))))
+TMlam2(
+"cs", TPstr,
+TMlam2(
+"test", TPfun(TPchr, TPbtf),
+TMapp(TMapp(
+TMint_forall, TMstr_len(cs)), TMlam("i0", TMapp(test, TMstr_get_at(cs, i0))))))
 end // end-of-let // end of [TMstr_forall]
 
 (* ****** ****** *)
 
-(* end of [CS525-2022-Fall/projects/midterm/Solution/midterm_lib.dats] *)
+val
+TMforall_foreach =
+let
+val x0 = TMvar"x0"
+val xs = TMvar"xs"
+val work = TMvar"work"
+val forall = TMvar"forall" in
+TMlam("forall",
+TMlam("xs", TMlam("work",
+TMignr(TMapp(TMapp(forall, xs), TMlam("x0", TMseq(TMapp(work, x0), TMtrue)))))))
+end // end-of-let // end of [TMforall_foreach]
+
+(* ****** ****** *)
+
+val
+TMint_foreach = TMapp(TMforall_foreach, TMint_forall)
+val
+TMstr_foreach = TMapp(TMforall_foreach, TMstr_forall)
+
+(* ****** ****** *)
+
+(* end of [CS525-2022-Fall/projects/midterm/Solution/midterm_lib0.dats] *)

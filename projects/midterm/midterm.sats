@@ -66,8 +66,11 @@ typedef topr = string
 //
 datatype term =
 //
+| TMnil of ()
+//
 | TMint of int
 | TMbtf of bool
+| TMchr of char
 | TMstr of string
 //
 | TMvar of tvar
@@ -89,10 +92,13 @@ datatype term =
 | TMfix of
   (tvar(*f0*), tvar(*x1*), term)
 //
+| TManno of
+  (term, type(*annotation*))
+//
 | TMlam2 of
-  (tvar, type, term)
+  (tvar(*x1*), type(*x1-type*), term)
 | TMfix2 of
-  (tvar(*f0*), tvar(*x1*), type, term)
+  (tvar(*f0*), tvar(*x1*), type(*f0-type*), term)
 //
 where termlst = mylist(term)
 //
@@ -115,9 +121,14 @@ datatype
 value =
 //
 |
+VALnil of ()
+//
+|
 VALint of int
 |
 VALbtf of bool
+|
+VALchr of char
 |
 VALstr of string
 //

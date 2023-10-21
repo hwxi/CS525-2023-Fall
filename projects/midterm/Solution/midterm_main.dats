@@ -62,6 +62,11 @@ fprint_term
 (out, t0) =
 (
 case+ t0 of
+//
+|
+TMnil() =>
+fprint!(out, "TMnil(", ")")
+//
 |
 TMint(i0) =>
 fprint!(out, "TMint(", i0, ")")
@@ -69,8 +74,12 @@ fprint!(out, "TMint(", i0, ")")
 TMbtf(b0) =>
 fprint!(out, "TMbtf(", b0, ")")
 |
+TMchr(c0) =>
+fprint!(out, "TMchr(", c0, ")")
+|
 TMstr(s0) =>
 fprint!(out, "TMstr(", s0, ")")
+//
 |
 TMvar(x0) =>
 fprint!(out, "TMvar(", x0, ")")
@@ -110,6 +119,11 @@ TMfix(f, x, tt) =>
 fprint!(out, "TMfix(", f, ";", x, ";", tt, ")")
 //
 |
+TManno(t1, T1) =>
+(
+  fprint!(out, "TManno(", t1, ";", T1, ")"))
+//
+|
 TMlam2(x, Tx, tt) =>
 fprint!(out, "TMlam2(", x, ";", Tx, ";", tt, ")")
 |
@@ -133,12 +147,20 @@ fprint_value
 (out, v0) =
 (
 case+ v0 of
+//
+|
+VALnil() =>
+fprint!(out, "VALnil(", ")")
+//
 |
 VALint(i0) =>
 fprint!(out, "VALint(", i0, ")")
 |
 VALbtf(b0) =>
 fprint!(out, "VALbtf(", b0, ")")
+|
+VALchr(c0) =>
+fprint!(out, "VALchr(", c0, ")")
 |
 VALstr(s0) =>
 fprint!(out, "VALstr(", s0, ")")
@@ -266,6 +288,56 @@ println!
 end // end-of-let
 with ~TypeError() => println!("TPstr_forall: type error!")
 //
+(* ****** ****** *)
+//
+val () =
+try
+let
+val
+TPforall_foreach =
+term_type0(TMforall_foreach)
+in//let
+println!
+("TPforall_foreach = ", TPforall_foreach)
+end // end-of-let
+with ~TypeError() => println!("TPforall_foreach: type error!")
+//
+(* ****** ****** *)
+//
+val () =
+try
+let
+val
+TPint_foreach =
+term_type0(TMint_foreach)
+in//let
+println!
+("TPint_foreach = ", TPint_foreach)
+end // end-of-let
+with ~TypeError() => println!("TPint_foreach: type error!")
+//
+(* ****** ****** *)
+//
+val () =
+try
+let
+val
+TPstr_foreach =
+term_type0(TMstr_foreach)
+in//let
+println!
+("TPstr_foreach = ", TPstr_foreach)
+end // end-of-let
+with ~TypeError() => println!("TPstr_foreach: type error!")
+//
+(* ****** ****** *)
+
+val-
+VALnil() =
+term_eval0
+(TMapp(TMapp
+(TMstr_foreach, TMstr"Hello, world!\n"), TMlam("c", TMprchr(TMvar"c"))))
+
 (* ****** ****** *)
 
 (* end of [CS525-2022-Fall/projects/midterm/Solution/midterm_main.dats] *)

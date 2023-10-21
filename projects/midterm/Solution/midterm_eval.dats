@@ -15,6 +15,10 @@ CS525-2023-Fall: midterm
 #staload
 "./../../../mylib/mylib.dats"
 (* ****** ****** *)
+
+exception EXNstr_get_at
+
+(* ****** ****** *)
 //
 implement
 term_eval0(t0) =
@@ -29,15 +33,15 @@ term_eval1(t0, e0) =
 (
 case+ t0 of
 //
-|
-TMvar(x0) =>
+|TMvar(x0) =>
 envir_lookup(e0, x0)
-|
-TMint(i0) => VALint(i0)
-|
-TMbtf(b0) => VALbtf(b0)
-|
-TMstr(s0) => VALstr(s0)
+//
+|TMnil() => VALnil()
+//
+|TMint(i0) => VALint(i0)
+|TMbtf(b0) => VALbtf(b0)
+|TMchr(c0) => VALchr(c0)
+|TMstr(s0) => VALstr(s0)
 //
 |TMlam _ => VALlam(t0, e0)
 |TMfix _ => VALfix(t0, e0)
@@ -76,6 +80,40 @@ val vs = termlst_eval1(ts, e0)
 in//let
 //
 case- nm of
+//
+| "<" =>
+let
+val-mylist_cons(v1, vs) = vs
+val-mylist_cons(v2, vs) = vs
+val-VALint(i1) = v1 and VALint(i2) = v2
+in
+  VALbtf(i1 < i2)
+end
+| ">" =>
+let
+val-mylist_cons(v1, vs) = vs
+val-mylist_cons(v2, vs) = vs
+val-VALint(i1) = v1 and VALint(i2) = v2
+in
+  VALbtf(i1 > i2)
+end
+| "<=" =>
+let
+val-mylist_cons(v1, vs) = vs
+val-mylist_cons(v2, vs) = vs
+val-VALint(i1) = v1 and VALint(i2) = v2
+in
+  VALbtf(i1 <= i2)
+end
+| ">=" =>
+let
+val-mylist_cons(v1, vs) = vs
+val-mylist_cons(v2, vs) = vs
+val-VALint(i1) = v1 and VALint(i2) = v2
+in
+  VALbtf(i1 >= i2)
+end
+//
 | "+" =>
 let
 val-mylist_cons(v1, vs) = vs
@@ -117,45 +155,67 @@ in
   VALint(i1 % i2)
 end
 //
-| "<" =>
+| "str_len" =>
+let
+val-mylist_cons(v1, vs) = vs
+in
+let
+val-
+VALstr(cs) = v1 in
+  VALint(g0u2i(string_length(cs))) end end
+//
+| "str_get_at" =>
 let
 val-mylist_cons(v1, vs) = vs
 val-mylist_cons(v2, vs) = vs
-val-VALint(i1) = v1 and VALint(i2) = v2
-in
-  VALbtf(i1 < i2)
+val-VALstr(cs) = v1 and VALint(i0) = v2
+in//let
+let
+val i0 = g1ofg0_int(i0)
+val cs = g1ofg0_string(cs)
+val n0 = g1u2i(string1_length(cs))
+in//let
+if
+i0 < 0
+then $raise EXNstr_get_at
+else
+(
+  if
+  i0 >= n0
+  then $raise EXNstr_get_at
+  else
+  VALchr(string_get_at(cs, i0)) ) end end
+//
+| "print" =>
+let
+val-mylist_cons(v1, vs) = vs
+in//let
+let
+val-
+VALint(i0) = v1 in print(i0); VALnil() end
 end
-| ">" =>
+| "prchr" =>
 let
 val-mylist_cons(v1, vs) = vs
-val-mylist_cons(v2, vs) = vs
-val-VALint(i1) = v1 and VALint(i2) = v2
-in
-  VALbtf(i1 > i2)
+in//let
+let
+val-
+VALchr(c0) = v1 in print(c0); VALnil() end
 end
-| "<=" =>
+| "prstr" =>
 let
 val-mylist_cons(v1, vs) = vs
-val-mylist_cons(v2, vs) = vs
-val-VALint(i1) = v1 and VALint(i2) = v2
-in
-  VALbtf(i1 <= i2)
-end
-| ">=" =>
+in//let
 let
-val-mylist_cons(v1, vs) = vs
-val-mylist_cons(v2, vs) = vs
-val-VALint(i1) = v1 and VALint(i2) = v2
-in
-  VALbtf(i1 >= i2)
+val-
+VALstr(cs) = v1 in print(cs); VALnil() end
 end
 //
 | _(*unsupported*) =>
 (
 exit(1) ) where
 {
-val () = println!("term_eval1: t0 = ", t0)
-}
+  val () = println!("term_eval1: t0 = ", t0) }
 //
 end // end of [TMopr(nm, ts)]
 //
@@ -201,6 +261,9 @@ TMtup(t1, t2) =>
 {
   val v1 = term_eval1(t1, e0)
   val v2 = term_eval1(t2, e0) }
+//
+|
+TManno(t1, T1) => term_eval1(t1, e0)
 //
 |
 TMlam2

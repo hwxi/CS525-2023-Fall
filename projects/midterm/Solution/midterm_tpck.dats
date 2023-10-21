@@ -19,8 +19,8 @@ exception TypeError of ()
 (* ****** ****** *)
 val TPnil = TPbas("nil")
 val TPint = TPbas("int")
-val TPchr = TPbas("char")
 val TPbtf = TPbas("bool")
+val TPchr = TPbas("char")
 val TPstr = TPbas("string")
 (* ****** ****** *)
 implement
@@ -235,15 +235,21 @@ term_type1
 case+ t0 of
 //
 |
-TMint(i0) => TPint
+TMnil() => TPnil(*val*)
+//
 |
-TMbtf(b0) => TPbtf
+TMint(i0) => TPint(*val*)
 |
-TMstr(s0) => TPstr
+TMbtf(b0) => TPbtf(*val*)
+|
+TMchr(c0) => TPchr(*val*)
+|
+TMstr(s0) => TPstr(*val*)
 //
 |
 TMvar(x0) =>
-tpctx_lookup(c0, x0)
+(
+  tpctx_lookup(c0, x0))
 //
 |
 TMlam(x0, tt) =>
@@ -495,6 +501,11 @@ in//let
 end//end-of-[TMfix(f0,x0,tt)]
 //
 |
+TManno(t1, T1) =>
+(
+term_type1_ck(t1,T1,c0); T1)
+//
+|
 TMlam2
 (x0, Tx, tt) =>
 let
@@ -503,9 +514,8 @@ mylist_cons((x0, Tx), c0)
 in//let
   TPfun(Tx, Tt) where
 {
-  val Tt = term_type1(tt, c1)
-}
-end//end-of-[TMlam2(x0,Tx,tt)]
+  val Tt = term_type1(tt, c1) }
+end // end-of-[TMlam2(x0,Tx,tt)]
 //
 |
 TMfix2
