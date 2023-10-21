@@ -109,6 +109,41 @@ fun
 txyz_solve
 (r1: txyz, T2: type): bool
 //
+(* ****** ****** *)
+
+implement
+txyz_solve(r1, T2) =
+let
+//
+fun
+occurs(T0: type): bool =
+(
+case+ T0 of
+|
+TPbas _ => false
+|
+TPxyz(r2) => (r1 = r2)
+//
+|
+TPfun(T1, T2) =>
+occurs(T1) || occurs(T2)
+|
+TPtup(T1, T2) =>
+occurs(T1) || occurs(T2)
+//
+) where
+{
+  val T0 = type_norm(T0) }
+//
+in//let
+  if
+  occurs(T2)
+  then false else
+  (!r1 := myoptn_cons(T2); true)
+end // end of [txyz_solve(r1, T2)]
+
+(* ****** ****** *)
+//
 extern
 fun
 type_unify
