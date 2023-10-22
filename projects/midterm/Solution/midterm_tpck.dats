@@ -300,7 +300,7 @@ in//let
 {
   val Tt = term_type1(tt, c1)
 }
-end//end-of-[TMlam2(x0,Tx,tt)]
+end//end-of-[TMlamt(x0,Tx,tt)]
 //
 |
 TMapp(t1, t2) =>
@@ -544,7 +544,7 @@ TManno(t1, T1) =>
 term_type1_ck(t1,T1,c0); T1)
 //
 |
-TMlam2
+TMlamt
 (x0, Tx, tt) =>
 let
 val c1 =
@@ -553,10 +553,10 @@ in//let
   TPfun(Tx, Tt) where
 {
   val Tt = term_type1(tt, c1) }
-end // let // end-of-[TMlam2(x0,Tx,tt)]
+end // let // end-of-[TMlamt(x0,Tx,tt)]
 //
 |
-TMfix2
+TMfixt
 (f0, x0, Tf, tt) =>
 let
 val-
@@ -571,7 +571,7 @@ in//let
   val () =
   term_type1_ck(tt, Ty, c2)
 }
-end // let // end-of-[TMfix2(x0,Tx,tt)]
+end // let // end-of-[TMfixt(x0,Tx,tt)]
 //
 (*
 | _(*unsupported*) =>

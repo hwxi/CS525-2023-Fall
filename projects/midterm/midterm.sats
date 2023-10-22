@@ -102,9 +102,9 @@ datatype term =
 | TManno of
   (term, type(*annotation*))
 //
-| TMlam2 of
+| TMlamt of
   (tvar(*x1*), type(*x1-type*), term)
-| TMfix2 of
+| TMfixt of
   (tvar(*f0*), tvar(*x1*), type(*f0-type*), term)
 //
 where termlst = mylist(term)

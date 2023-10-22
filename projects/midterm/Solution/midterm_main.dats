@@ -138,11 +138,11 @@ TManno(t1, T1) =>
   fprint!(out, "TManno(", t1, ";", T1, ")"))
 //
 |
-TMlam2(x, Tx, tt) =>
-fprint!(out, "TMlam2(", x, ";", Tx, ";", tt, ")")
+TMlamt(x, Tx, tt) =>
+fprint!(out, "TMlamt(", x, ";", Tx, ";", tt, ")")
 |
-TMfix2(f, x, Tf, tt) =>
-fprint!(out, "TMfix2(", f, ";", x, ";", Tf, ";", tt, ")")
+TMfixt(f, x, Tf, tt) =>
+fprint!(out, "TMfixt(", f, ";", x, ";", Tf, ";", tt, ")")
 //
 )
 //

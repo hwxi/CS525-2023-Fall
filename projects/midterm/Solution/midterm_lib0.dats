@@ -157,8 +157,8 @@ val i0 = TMvar"i0"
 val test = TMvar"test"
 val loop = TMvar"loop"
 in//let
-TMlam2("n0", TPint,
-TMlam2("test", TPfun(TPint, TPbtf),
+TMlamt("n0", TPint,
+TMlamt("test", TPfun(TPint, TPbtf),
   TMapp(
   TMfix("loop", "i0", TMif0(TMlt(i0, n0), TMif0(TMapp(test, i0), TMapp(loop, TMsuc(i0)), TMfalse), TMtrue)), TMint(0))))
 end // end-of-let // end of [TMint_forall]
@@ -172,9 +172,9 @@ val cs = TMvar"cs"
 val i0 = TMvar"i0"
 val test = TMvar"test"
 in//let
-TMlam2(
+TMlamt(
 "cs", TPstr,
-TMlam2(
+TMlamt(
 "test", TPfun(TPchr, TPbtf),
 TMapp(TMapp(
 TMint_forall, TMstr_len(cs)), TMlam("i0", TMapp(test, TMstr_get_at(cs, i0))))))

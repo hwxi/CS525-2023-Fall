@@ -306,11 +306,11 @@ TMtup(t1, t2) =>
 TManno(t1, T1) => term_eval1(t1, e0)
 //
 |
-TMlam2
+TMlamt
 ( x1
 , Tx, tt) => VALlam(TMlam(x1, tt), e0)
 |
-TMfix2
+TMfixt
 ( f0, x1
 , Tf, tt) => VALlam(TMfix(f0, x1, tt), e0)
 //
