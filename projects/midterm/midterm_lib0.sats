@@ -23,6 +23,8 @@ val TMrlistize: term
 val TMstreamize: term
 //
 (* ****** ****** *)
+val TMstream_forall: term
+(* ****** ****** *)
 //
 val TMforall_get_at: term
 val TMforall_foreach_at: term
