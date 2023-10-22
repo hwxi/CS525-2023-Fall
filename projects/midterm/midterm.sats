@@ -100,7 +100,7 @@ datatype term =
   (tvar(*f0*), tvar(*x1*), term)
 //
 | TManno of
-  (term, type(*annotation*))
+  (term, type(*annotated*))
 //
 | TMlamt of
   (tvar(*x1*), type(*x1-type*), term)

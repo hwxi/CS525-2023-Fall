@@ -132,8 +132,14 @@ TMseq3
 //
 (* ****** ****** *)
 fun
-TMignr(t1: term) = TMlet("", t1, TMnil(*con*))
+TMlazy
+(t1: term): term =
+TMlam("", t1(*thunk*))
 (* ****** ****** *)
+fun
+TMignr
+(t1: term): term =
+TMlet("", t1, TMnil(*con*))
 (* ****** ****** *)
 //
 (*
