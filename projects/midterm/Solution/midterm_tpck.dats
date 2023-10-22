@@ -621,7 +621,7 @@ val () = println!("term_type1_ck: t0 = ", t0)
 val () = println!("term_type1_ck: T0 = ", T0)
 val () = println!("term_type1_ck: Tt = ", Tt)
 *)
-}
+} (*where*) // end of [term_type1_ck(t0, Tt, ctx)]
 
 (* ****** ****** *)
 

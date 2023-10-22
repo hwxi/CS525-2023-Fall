@@ -10,6 +10,8 @@ CS525-2023-Fall: midterm
 //
 #staload
 "./../midterm.sats"//opened
+#staload
+"./../midterm_lib0.sats"//opened
 //
 (* ****** ****** *)
 #staload
@@ -131,51 +133,6 @@ TMseq3
 (* ****** ****** *)
 fun
 TMignr(t1: term) = TMlet("", t1, TMnil(*con*))
-(* ****** ****** *)
-//
-extern
-val TMint_forall: term
-extern
-val TMstr_forall: term
-extern
-val TMlist_forall: term
-//
-(* ****** ****** *)
-
-extern
-val TMstr_make_fwork: term
-extern
-val TMlist_make_fwork: term
-
-(* ****** ****** *)
-//
-extern
-val TMlistize: term
-extern
-val TMrlistize: term
-//
-extern
-val TMstreamize: term
-//
-(* ****** ****** *)
-//
-extern
-val TMforall_get_at: term
-extern
-val TMforall_foreach_at: term
-//
-(* ****** ****** *)
-//
-extern
-val TMforeach_map_list: term
-//
-(* ****** ****** *)
-//
-extern
-val TMforeach_foldleft: term
-extern
-val TMforeach_foldright: term
-//
 (* ****** ****** *)
 (* ****** ****** *)
 //
