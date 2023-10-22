@@ -146,6 +146,9 @@ VALref of (ref(value))
 VALtup of (value, value)
 //
 |
+VALlst of (mylist(value))
+//
+|
 VALlam of (term(*lam*), envir)
 |
 VALfix of (term(*fix*), envir)

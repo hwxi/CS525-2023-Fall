@@ -180,13 +180,19 @@ VALstr(s0) =>
 fprint!(out, "VALstr(", s0, ")")
 //
 |
-VALtup(v1, v2) =>
+VALref(r0) =>
+fprint!(out, "VALref(", !r0, ")")
+//
+|
+VALtup
+(v1, v2) =>
 fprint!
 (out, "VALtup(", v1, ";", v2, ")")
 //
 |
-VALref(r0) =>
-fprint!(out, "VALref(", !r0, ")")
+VALlst(vs) =>
+(
+  fprint!(out, "VALlst(", vs, ")"))
 //
 |
 VALlam _ =>

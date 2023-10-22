@@ -15,9 +15,15 @@ CS525-2023-Fall: midterm
 #staload
 "./../../../mylib/mylib.dats"
 (* ****** ****** *)
-
 exception EXNstr_get_at
-
+(* ****** ****** *)
+exception EXNoptn_uncons1
+(* ****** ****** *)
+exception EXNlist_uncons1
+exception EXNlist_uncons2
+(* ****** ****** *)
+exception EXNllist_uncons1
+exception EXNllist_uncons2
 (* ****** ****** *)
 //
 implement

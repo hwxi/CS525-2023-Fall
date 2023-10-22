@@ -24,6 +24,13 @@ myoptn(a:t@ype) =
 | myoptn_cons of (a)
 //
 (* ****** ****** *)
+extern
+fun{a:t@ype}
+myoptn_nilq(myoptn(a)): bool
+extern
+fun{a:t@ype}
+myoptn_consq(myoptn(a)): bool
+(* ****** ****** *)
 //
 extern
 fun
@@ -45,6 +52,13 @@ mylist(a:t@ype) =
 | mylist_nil of ()
 | mylist_cons of (a, mylist(a))
 //
+(* ****** ****** *)
+extern
+fun{a:t@ype}
+mylist_nilq(mylist(a)): bool
+extern
+fun{a:t@ype}
+mylist_consq(mylist(a)): bool
 (* ****** ****** *)
 //
 extern
@@ -81,6 +95,25 @@ ref_equal(r1, r2) =
 = ref_get_ptr(r2) )
 //
 (* ****** ****** *)
+(* ****** ****** *)
+//
+implement
+{a}
+myoptn_nilq(xs) =
+(
+case+ xs of
+|
+myoptn_nil _ => true| _ => false)
+
+implement
+{a}//tmp
+myoptn_consq(xs) =
+(
+case+ xs of
+|
+myoptn_cons _ => true| _ => false)
+//
+(* ****** ****** *)
 
 implement
 {a}
@@ -107,22 +140,39 @@ fprint_val<a>(out, x1); fprint!(out, ")"))
 //
 (* ****** ****** *)
 (* ****** ****** *)
-
+//
 implement
 {a}
+mylist_nilq(xs) =
+(
+case+ xs of
+|
+mylist_nil _ => true| _ => false)
+
+implement
+{a}//tmp
+mylist_consq(xs) =
+(
+case+ xs of
+|
+mylist_cons _ => true| _ => false)
+//
+(* ****** ****** *)
+
+implement
+{a}//tmp
 mylist_sing(x1) =
 mylist_cons
 (x1, mylist_nil())
 implement
-{a}
+{a}//tmp
 mylist_pair(x1, x2) =
-mylist_cons
-(x1, mylist_sing<a>(x2))
+mylist_cons(x1, mylist_sing<a>(x2))
 
 (* ****** ****** *)
 
 implement
-{a}
+{a}//tmp
 print_mylist(xs) = 
 fprint_mylist<a>(stdout_ref, xs)
 
