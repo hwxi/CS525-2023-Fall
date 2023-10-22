@@ -61,6 +61,16 @@ TPbas _ => false
 TPxyz(r2) => (r1 = r2)
 //
 |
+TPref(T1) => occurs(T1)
+|
+TPlazy(T1) => occurs(T1)
+//
+|
+TPlist(T1) => occurs(T1)
+|
+TPllist(T1) => occurs(T1)
+//
+|
 TPfun(T1, T2) =>
 occurs(T1) || occurs(T2)
 |
@@ -146,27 +156,55 @@ println!
 ("type_unify: f0_helper2: T1 = ", T1) }
 //
 |
+TPref(T10) =>
+(
+case+ T2 of
+|
+TPref(T20) =>
+unify(T10, T20) | _(*non-TPref*) => false)
+|
+TPlazy(T10) =>
+(
+case+ T2 of
+|
+TPlazy(T20) =>
+unify(T10, T20) | _(*non-TPlazy*) => false)
+//
+|
+TPlist(T10) =>
+(
+case+ T2 of
+|
+TPlist(T20) =>
+unify(T10, T20) | _(*non-TPlist*) => false)
+|
+TPllist(T10) =>
+(
+case+ T2 of
+|
+TPllist(T20) =>
+unify(T10, T20) | _(*non-TPllist*) => false)
+//
+|
 TPfun(T11, T12) =>
 (case+ T2 of
 |
 TPfun(T21, T22) =>
-(
-unify(T11, T21)
-&&
-unify(T12, T22)) | _(*non-TPtup*) => false)
+(unify(T11, T21)
+ &&
+ unify(T12, T22)) | _(*non-TPtup*) => false)
 //
 |
 TPtup(T11, T12) =>
 (case+ T2 of
 |
 TPtup(T21, T22) =>
-(
-unify(T11, T21)
-&&
-unify(T12, T22)) | _(*non-TPtup*) => false)
+(unify(T11, T21)
+ &&
+ unify(T12, T22)) | _(*non-TPtup*) => false)
 //
 )
-}
+} (*where*) // end of [ type_unify(T1, T2) ]
 //
 (* ****** ****** *)
 
@@ -418,7 +456,7 @@ val () =
 println!("term_type1:TMopr:t0 = ", t0)
 }
 //
-) (*case+*)//end-of-[TMopr(nm,ts)]
+) (*case+*) // end-of-[ TMopr(nm, ts) ]
 //
 |
 TMif0
@@ -515,7 +553,7 @@ in//let
   TPfun(Tx, Tt) where
 {
   val Tt = term_type1(tt, c1) }
-end // end-of-[TMlam2(x0,Tx,tt)]
+end // let // end-of-[TMlam2(x0,Tx,tt)]
 //
 |
 TMfix2
@@ -533,7 +571,7 @@ in//let
   val () =
   term_type1_ck(tt, Ty, c2)
 }
-end//end-of-[TMfix2(x0,Tx,tt)]
+end // let // end-of-[TMfix2(x0,Tx,tt)]
 //
 (*
 | _(*unsupported*) =>
@@ -545,7 +583,7 @@ println!("term_type1: t0 = ", t0)
 }
 *)
 //
-) (* end-of-[term_type1(t0, c0)] *)
+) (*case+*) // end-of-[term_type1(t0, c0)]
 
 (* ****** ****** *)
 

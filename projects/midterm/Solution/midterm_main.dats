@@ -28,9 +28,9 @@ fprint_val<type> = fprint_type
 //
 implement
 fprint_type
-(out, tp) =
+(out, T0) =
 (
-case+ tp of
+case+ T0 of
 |
 TPbas(nm) =>
 fprint!(out, "TPbas(", nm, ")")
@@ -40,11 +40,25 @@ TPxyz(r0) =>
 fprint!(out, "TPxyz(", !r0, ")")
 //
 |
-TPfun(tp1, tp2) =>
-fprint!(out, "TPfun(", tp1, ";", tp2, ")")
+TPref(T1) =>
+fprint!(out, "TPref(", T1, ")")
 |
-TPtup(tp1, tp2) =>
-fprint!(out, "TPtup(", tp1, ";", tp2, ")")
+TPlazy(T1) =>
+fprint!(out, "TPlazy(", T1, ")")
+//
+|
+TPlist(T1) =>
+fprint!(out, "TPlist(", T1, ")")
+|
+TPllist(T1) =>
+fprint!(out, "TPllist(", T1, ")")
+//
+|
+TPfun(T1, T2) =>
+fprint!(out, "TPfun(", T1, ";", T2, ")")
+|
+TPtup(T1, T2) =>
+fprint!(out, "TPtup(", T1, ";", T2, ")")
 )
 //
 (* ****** ****** *)
@@ -169,6 +183,10 @@ fprint!(out, "VALstr(", s0, ")")
 VALtup(v1, v2) =>
 fprint!
 (out, "VALtup(", v1, ";", v2, ")")
+//
+|
+VALref(r0) =>
+fprint!(out, "VALref(", !r0, ")")
 //
 |
 VALlam _ =>

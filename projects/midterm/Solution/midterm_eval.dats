@@ -155,36 +155,7 @@ in
   VALint(i1 % i2)
 end
 //
-| "str_len" =>
-let
-val-mylist_cons(v1, vs) = vs
-in
-let
-val-
-VALstr(cs) = v1 in
-  VALint(g0u2i(string_length(cs))) end end
-//
-| "str_get_at" =>
-let
-val-mylist_cons(v1, vs) = vs
-val-mylist_cons(v2, vs) = vs
-val-VALstr(cs) = v1 and VALint(i0) = v2
-in//let
-let
-val i0 = g1ofg0_int(i0)
-val cs = g1ofg0_string(cs)
-val n0 = g1u2i(string1_length(cs))
-in//let
-if
-i0 < 0
-then $raise EXNstr_get_at
-else
-(
-  if
-  i0 >= n0
-  then $raise EXNstr_get_at
-  else
-  VALchr(string_get_at(cs, i0)) ) end end
+(* ****** ****** *)
 //
 | "print" =>
 let
@@ -210,6 +181,75 @@ let
 val-
 VALstr(cs) = v1 in print(cs); VALnil() end
 end
+//
+(* ****** ****** *)
+//
+| "str_len" =>
+let
+val-mylist_cons(v1, vs) = vs
+in
+let
+val-
+VALstr(cs) = v1 in
+  VALint(g0u2i(string_length(cs))) end
+end
+//
+| "str_get_at" =>
+let
+val-mylist_cons(v1, vs) = vs
+val-mylist_cons(v2, vs) = vs
+val-VALstr(cs) = v1 and VALint(i0) = v2
+in//let
+let
+val i0 = g1ofg0_int(i0)
+val cs = g1ofg0_string(cs)
+val n0 = g1u2i(string1_length(cs))
+in//let
+if
+i0 < 0
+then $raise EXNstr_get_at else
+(
+if
+i0 >= n0
+then $raise EXNstr_get_at
+else VALchr(string_get_at(cs, i0)) ) end
+end // end of [str_get_at]
+//
+(* ****** ****** *)
+//
+| "ref_get" =>
+let
+val-
+mylist_cons(v1, vs) = vs
+in
+  let val-VALref(vr) = v1 in !vr end
+end
+| "ref_set" =>
+let
+val-
+mylist_cons(v1, vs) = vs
+val-
+mylist_cons(v2, vs) = vs
+in
+let
+val-
+VALref(vr) = v1 in !vr := v2; VALnil() end
+//
+end
+| "ref_new" =>
+let
+val-
+mylist_cons(v1, vs) = vs in VALref(ref(v1))
+end // end of [ref_new]
+//
+(* ****** ****** *)
+(*
+list_nilq, list_consq,
+list_uncons1, list_uncons2
+llist_nilq, llist_consq
+llist_uncons1, llist_uncons2
+*)
+(* ****** ****** *)
 //
 | _(*unsupported*) =>
 (

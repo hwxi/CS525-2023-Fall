@@ -16,16 +16,19 @@ TPbas of tbas // base types:
 TPxyz of txyz
 //
 |
+TPref of type
+|
+TPlazy of type
+//
+|
+TPlist of type // for lists
+|
+TPllist of type // for lazy lists
+//
+|
 TPfun of (type, type) // T1 -> T2
 |
 TPtup of (type, type) // (T1 * T2)
-//
-(*
-| TPref of type
-| TParray of type
-| TPlist of type // for lists
-| TPllist of type // for lazy lists
-*)
 //
 where
 typelst = mylist(type)
@@ -131,6 +134,9 @@ VALbtf of bool
 VALchr of char
 |
 VALstr of string
+//
+|
+VALref of (ref(value))
 //
 |
 VALtup of (value, value)
