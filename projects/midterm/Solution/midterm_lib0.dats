@@ -134,10 +134,14 @@ TMseq3
 fun
 TMlazy
 (t1: term): term =
-TMlam("", t1(*thunk*))
+TMlam("", t1)(*thunk*)
+fun
+TMeval
+(t1: term): term =
+TMapp(t1(*thunk*), TMnil)
 (* ****** ****** *)
 fun
-TMignr
+TMignr // ignored
 (t1: term): term =
 TMlet("", t1, TMnil(*con*))
 (* ****** ****** *)
