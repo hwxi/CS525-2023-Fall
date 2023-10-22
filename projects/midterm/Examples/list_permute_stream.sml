@@ -7,6 +7,7 @@ the enumeration should be of the following order
 [1;2;3], [1;3;2], [2;1;3], [2;3;1], [3;1;2], [3;2;1].
 *)
 (* ****** ****** *)
+
 fun
 stream_nil
 ((*void*)) =

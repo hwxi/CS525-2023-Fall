@@ -45,8 +45,21 @@ thress programs in LAMBDA
 *)
 //
 val TMword_buddy_stream: term
+(*
+Any string is a legal word.
+There is no need for a dictionary.
+*)
+//
 val TMlist_permute_stream: term
+(*
+Enumerate all the permutations of
+a given list.
+*)
+//
 val TMnqueen_puzzle_solve: term
+(*
+You can solve N-queen or just 8-queen.
+*)
 //
 (* ****** ****** *)
 
