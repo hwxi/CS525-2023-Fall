@@ -300,7 +300,7 @@ in//let
 {
   val Tt = term_type1(tt, c1)
 }
-end//end-of-[TMlamt(x0,Tx,tt)]
+end//end-of-[TMlam(x0,Tx,tt)]
 //
 |
 TMapp(t1, t2) =>

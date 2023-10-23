@@ -76,9 +76,9 @@ datatype term =
 | TMnil of ()
 //
 | TMint of int
-| TMbtf of bool
-| TMchr of char
-| TMstr of string
+| TMbtf of bool // bit
+| TMchr of char // short
+| TMstr of string // char sequence
 //
 | TMvar of tvar
 | TMlam of (tvar, term)
@@ -89,7 +89,7 @@ datatype term =
 | TMif0 of (term, term, term)
 //
 | TMlet of
-( tvar(*x*)
+( tvar(*x1*)
 , term(*t1*), term(*t2*))
 //
 | TMfst of (term)
@@ -100,7 +100,7 @@ datatype term =
   (tvar(*f0*), tvar(*x1*), term)
 //
 | TManno of
-  (term, type(*annotated*))
+  (term, type(*annotated*)) // debug
 //
 | TMlamt of
   (tvar(*x1*), type(*x1-type*), term)

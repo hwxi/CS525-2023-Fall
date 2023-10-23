@@ -359,8 +359,30 @@ with ~TypeError() => println!("TPstr_foreach: type error!")
 val-
 VALnil() =
 term_eval0
-(TMapp(TMapp
-(TMstr_foreach, TMstr"Hello, world!\n"), TMlam("c", TMprchr(TMvar"c"))))
+(
+TMapp(
+TMapp(
+TMstr_foreach,
+TMstr"Hello, world!\n"), TMlam("c", TMprchr(TMvar"c"))))
+
+(* ****** ****** *)
+
+val TMisprime =
+let
+val i0 = TMvar"i0"
+val n0 = TMvar"n0" in
+TMlam("n0",
+TMapp(
+TMapp(
+TMint_forall,
+TMsub(n0, TMint(2))),
+TMlam("i0", TMgt(TMmod(n0, TMadd(i0, TMint(2))), TMint(0)))))
+end
+
+(* ****** ****** *)
+
+val () =
+println!("isprime = ", term_eval0(TMapp(TMisprime, TMint(727))))
 
 (* ****** ****** *)
 
