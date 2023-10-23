@@ -382,7 +382,7 @@ end
 (* ****** ****** *)
 
 val () =
-println!("isprime = ", term_eval0(TMapp(TMisprime, TMint(727))))
+println!("isprime(727) = ", term_eval0(TMapp(TMisprime, TMint(727))))
 
 (* ****** ****** *)
 
