@@ -286,7 +286,7 @@ foreach:
 implement
 {xs}
 {x0}
-foreach_to_listize
+foreach_to_rlistize
 (foreach) =
 (
 lam(xs) =>
