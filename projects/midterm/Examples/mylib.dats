@@ -248,8 +248,7 @@ mylist_reverse
 implement
 {x0}
 mylist_reverse(xs) =
-foreach_to_foldleft
-(forall_to_foreach(mylist_forall))
+foreach_to_foldleft(mylist_foreach)
 (xs, mylist_nil, lam(r0, x0) => mylist_cons(x0, r0))
 
 (* ****** ****** *)
