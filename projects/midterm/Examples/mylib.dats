@@ -396,6 +396,26 @@ foreach_to_foldleft(foreach)
 //
 (* ****** ****** *)
 (* ****** ****** *)
+//
+fun
+{x0:t@ype}
+mylist_foreach
+( xs: mylist(x0)
+, work: (x0) -> void): void =
+forall_to_foreach(mylist_forall)(xs, work)
+//
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+{y0:t@ype}
+mylist_map
+( xs
+: mylist(x0)
+, fopr: (x0) -> y0): mylist(y0) =
+foreach_to_map_list(mylist_foreach)(xs, fopr)
+//
+(* ****** ****** *)
 (* ****** ****** *)
 //
 fun
@@ -418,26 +438,6 @@ fun
 mystream_sing
 ( x0 : x0 ): mystream(x0) =
 lam() => myllist_cons(x0, mystream_nil())
-//
-(* ****** ****** *)
-//
-fun
-{x0:t@ype}
-mylist_foreach
-( xs: mylist(x0)
-, work: (x0) -> void): void =
-forall_to_foreach(mylist_forall)(xs, work)
-//
-(* ****** ****** *)
-//
-fun
-{x0:t@ype}
-{y0:t@ype}
-mylist_map
-( xs
-: mylist(x0)
-, fopr: (x0) -> y0): mylist(y0) =
-foreach_to_map_list(mylist_foreach)(xs, fopr)
 //
 (* ****** ****** *)
 //
