@@ -470,28 +470,6 @@ myllist_cons(fopr(x1), auxmain(fxs))) }
 //
 fun
 {x0:t@ype}
-mylist_takeouts
-(xs: mylist(x0)): mylist@(x0, mylist(x0)) =
-(
-case xs of
-|
-mylist_nil() =>
-mylist_nil()
-|
-mylist_cons(x1, xs) =>
-mylist_cons
-(
-@(x1, xs)
-,
-mylist_map<(x0,mylist(x0))><(x0,mylist(x0))>
-( mylist_takeouts(xs)
-, lam(xxs) => (xxs.0, mylist_cons(x1, xxs.1))))
-)
-//
-(* ****** ****** *)
-//
-fun
-{x0:t@ype}
 mystream_append
 ( fxs: mystream(x0)
 , fys: mystream(x0)): mystream(x0) =
@@ -507,43 +485,6 @@ myllist_nil() => fys()
 |
 myllist_cons(x1, fxs) => myllist_cons(x1, auxmain(fxs))) }
 //
-(* ****** ****** *)
-
-fun
-{x0:t@ype}
-mystream_concat_list
-( xss
-: mylist(mystream(x0))): mystream(x0) =
-(
-  auxmain(xss) ) where
-{
-fun
-auxmain
-( xss
-: mylist(mystream(x0))): mystream(x0) = lam() =>
-(
-case+ xss of
-|
-mylist_nil() => myllist_nil()
-|
-mylist_cons(fxs, xss) => mystream_append<x0>(fxs, auxmain(xss))()) }
-//
-(* ****** ****** *)
-
-fun
-{x0:t@ype}
-mylist_permute
-(xs: mylist(x0)): mystream(mylist(x0)) = lam() =>
-(
-case+ xs of
-|
-mylist_nil() =>
-myllist_sing(mylist_nil())
-|
-mylist_cons(_, _) =>
-mystream_concat_list<mylist(x0)>
-(mylist_map(mylist_takeouts(xs), lam(xxs) => mystream_map(mylist_permute(xxs.1), lam xs => mylist_cons(xxs.0, xs))))())
-
 (* ****** ****** *)
 
 (* end of [CS525-2023-Fall/projects/midterm/examples/mylib.dats] *)

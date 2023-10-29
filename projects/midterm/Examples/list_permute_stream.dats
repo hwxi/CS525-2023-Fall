@@ -9,6 +9,49 @@ the enumeration should be of the following order
 (* ****** ****** *)
 #include "./mylib.dats"
 (* ****** ****** *)
+//
+fun
+{x0:t@ype}
+mylist_takeouts
+(xs: mylist(x0)): mylist@(x0, mylist(x0)) =
+(
+case xs of
+|
+mylist_nil() =>
+mylist_nil()
+|
+mylist_cons(x1, xs) =>
+mylist_cons
+(
+@(x1, xs)
+,
+mylist_map<(x0,mylist(x0))><(x0,mylist(x0))>
+( mylist_takeouts(xs)
+, lam(xxs) => (xxs.0, mylist_cons(x1, xxs.1))))
+)
+//
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+mystream_concat_list
+( xss
+: mylist(mystream(x0))): mystream(x0) =
+(
+  auxmain(xss) ) where
+{
+fun
+auxmain
+( xss
+: mylist(mystream(x0))): mystream(x0) = lam() =>
+(
+case+ xss of
+|
+mylist_nil() => myllist_nil()
+|
+mylist_cons(fxs, xss) => mystream_append<x0>(fxs, auxmain(xss))()) }
+//
+(* ****** ****** *)
 
 fun
 {x0:t@ype}
