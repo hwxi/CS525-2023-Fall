@@ -7,6 +7,9 @@ for BU CAS CS 525 (2023F)
 *)
 //
 (* ****** ****** *)
+#staload UN =
+"prelude/SATS/unsafe.sats"
+(* ****** ****** *)
 
 extern
 fun
@@ -40,7 +43,8 @@ print_myoptn(myoptn(a)): void
 extern
 fun
 {a:t@ype}
-fprint_myoptn(FILEref, myoptn(a)): void
+fprint_myoptn
+(out:FILEref, xs:myoptn(a)): void
 //
 (* ****** ****** *)
 #symload print with print_myoptn
@@ -66,7 +70,7 @@ fun{a:t@ype}
 mylist_sing(x1: a): mylist(a)
 extern
 fun{a:t@ype}
-mylist_pair(x1: a, x2: a): mylist(a)
+mylist_pair(x1:a, x2:a): mylist(a)
 //
 (* ****** ****** *)
 //
@@ -78,19 +82,34 @@ print_mylist(mylist(a)): void
 extern
 fun
 {a:t@ype}
-fprint_mylist(FILEref, mylist(a)): void
+fprint_mylist
+(out:FILEref, xs:mylist(a)): void
 //
 (* ****** ****** *)
-
 #symload print with print_mylist
 #symload fprint with fprint_mylist
+(* ****** ****** *)
 
+extern
+fun
+{a:t@ype}
+{b:t@ype}
+mylist_map
+(xs: mylist(a), fopr: a -> b): mylist(b)
+
+(* ****** ****** *)
+//
+extern
+fun
+string_make_mylist(mylist(char)): string
+//
 (* ****** ****** *)
 (* ****** ****** *)
 //
 implement
 {a}
-ref_equal(r1, r2) =
+ref_equal
+(r1, r2) =
 ( ref_get_ptr(r1)
 = ref_get_ptr(r2) )
 //
@@ -221,6 +240,25 @@ in//let
 fprint(out, "(");loop(xs, 0);fprint(out, ")")
 end//let//end-of-[fprint_mylist(out, xs)]
 
+(* ****** ****** *)
+//
+implement
+{a}{b}//tmp
+mylist_map(xs, fopr) =
+case+ xs of
+|
+mylist_nil() => mylist_nil()
+|
+mylist_cons(x1, xs) =>
+mylist_cons(fopr(x1), mylist_map(xs, fopr))
+//
+(* ****** ****** *)
+//
+implement
+string_make_mylist(cs) =
+strnptr2string
+(string_make_list($UN.cast{List0(charNZ)}(cs)))
+//
 (* ****** ****** *)
 
 (* end of [CS525-2023-Fall/mylib/mylib.dats] *)

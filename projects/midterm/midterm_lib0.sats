@@ -42,7 +42,7 @@ val TMforeach_foldright: term
 (*
 HX-2023-10-21:
 Please implement the following
-thress programs in LAMBDA
+three programs in LAMBDA
 *)
 //
 val TMword_buddy_stream: term
