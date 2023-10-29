@@ -57,6 +57,14 @@ mylist_forall
 //
 (* ****** ****** *)
 //
+extern
+fun
+{a:t@ype}
+mystream_forall
+(xs: mystream(a), test: a -> bool): bool
+//
+(* ****** ****** *)
+//
 implement
 int_forall
 (n0, test) =
@@ -93,7 +101,22 @@ case+ xs of
 mylist_nil() => true
 |
 mylist_cons(x1, xs) =>
-if test(x1) then mylist_forall(xs, test) else false
+if test(x1)
+then mylist_forall(xs, test) else false
+//
+(* ****** ****** *)
+//
+implement
+{a}(*tmp*)
+mystream_forall
+(fxs, test) =
+case+ fxs() of
+|
+myllist_nil() => true
+|
+myllist_cons(x1, fxs) =>
+if test(x1)
+then mystream_forall(fxs, test) else false
 //
 (* ****** ****** *)
 
@@ -121,6 +144,50 @@ in
   ( (*void*) )
 end (* end of [forall_to_foreach]: let *)
 
+(* ****** ****** *)
+//
+extern
+fun
+{xs:t@ype}
+{x0:t@ype}
+forall_to_get_at
+(
+forall:
+(xs,
+ x0 -> bool) -> bool): (xs, int) -> x0
+//
+implement
+{xs}
+{x0}
+forall_to_get_at
+(forall) =
+lam(xs, i0) =>
+let
+val i1 = ref<int>(0)
+val res =
+ref<myoptn(x0)>(myoptn_nil())
+in//let
+if
+(i0 < 0)
+then raise SubscriptExn else
+let
+val
+nfound =
+forall
+( xs
+, lam(x0) =>
+  if
+  (!i1 < i0)
+  then
+  (!i1 := !i1 + 1; true)
+  else (!res := myoptn_cons(x0); false))
+in//let
+if nfound
+then raise SubscriptExn else
+let val-myoptn_cons(x0) = !res in x0 end
+end//let
+end//let//end-of-[forall_to_get_at(forall)]
+//
 (* ****** ****** *)
 //
 extern
@@ -205,6 +272,277 @@ lam(xs) =>
 (
 foreach_to_foldleft(foreach)
 (xs, mylist_nil, lam(r0, x0) => mylist_cons(x0, r0))))
+
+(* ****** ****** *)
+//
+extern
+fun
+{x0:t@ype}
+{r0:t@ype}
+mylist_foldleft
+( xs: mylist(x0)
+, r0: r0, fopr: (r0, x0) -> r0): r0
+//
+implement
+{x0}
+{r0}
+mylist_foldleft
+(xs, r0, fopr) =
+(
+  loop(xs, r0)) where
+{
+fun
+loop
+(xs: mylist(x0), r0: r0): r0 =
+(
+case+ xs of
+|
+mylist_nil() => r0
+|
+mylist_cons
+(x1, xs) => loop(xs, fopr(r0, x1)))
+}
+//
+(* ****** ****** *)
+//
+extern
+fun
+{xs:t@ype}
+{x0:t@ype}
+{r0:t@ype}
+foreach_to_foldright
+( foreach
+: (xs, x0 -> void) -> void
+)
+: (xs, r0, (x0, r0) -> r0) -> r0
+//
+implement
+{xs}
+{x0}
+{r0}
+foreach_to_foldright
+(foreach) =
+lam(xs, r0, fopr) =>
+let
+val xs =
+mylist_reverse
+(foreach_to_listize(foreach)(xs))
+in//let
+mylist_foldleft(xs, r0, lam(r0, x0) => fopr(x0, r0))
+end//let//end-of-[foreach_to_foldright]
+//
+(* ****** ****** *)
+
+extern
+fun
+{(*tmp*)}
+str_make_fwork
+( fwork
+: (char -> void) -> void): string
+extern
+fun
+{x0:t@ype}
+mylist_make_fwork
+( fwork
+: ((x0) -> void) -> void): mylist(x0)
+
+(* ****** ****** *)
+
+implement
+{}(*tmp*)
+str_make_fwork(fwork) =
+string_make_mylist(mylist_make_fwork(fwork))
+
+(* ****** ****** *)
+
+implement
+{x0}(*tmp*)
+mylist_make_fwork(fwork) =
+let
+val res = ref<mylist(x0)>(mylist_nil())
+in//let
+(
+mylist_reverse(!res)) where
+{
+val () =
+fwork(lam(x0) => (!res := mylist_cons(x0, !res)))
+}
+end//let//end-of-[list_make_fwork]
+
+(* ****** ****** *)
+//
+extern
+fun
+{xs:t@ype}
+{x0:t@ype}
+{y0:t@ype}
+foreach_to_map_list
+(
+foreach:
+(xs, x0->void)->void): (xs, x0 -> y0) -> mylist(y0)
+//
+implement
+{xs}
+{x0}
+{y0}
+foreach_to_map_list
+(foreach) =
+(
+lam(xs, fopr) =>
+mylist_reverse
+(
+foreach_to_foldleft(foreach)
+(xs, mylist_nil, lam(r0, x0) => mylist_cons(fopr(x0), r0))))
+//
+(* ****** ****** *)
+(* ****** ****** *)
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+mystream_nil
+( (*void*) ):
+mystream(x0) =
+lam() => myllist_nil()
+//
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+myllist_sing
+( x0 : x0 ): myllist(x0) =
+myllist_cons(x0, mystream_nil())
+//
+fun
+{x0:t@ype}
+mystream_sing
+( x0 : x0 ): mystream(x0) =
+lam() => myllist_cons(x0, mystream_nil())
+//
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+mylist_foreach
+( xs: mylist(x0)
+, work: (x0) -> void): void =
+forall_to_foreach(mylist_forall)(xs, work)
+//
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+{y0:t@ype}
+mylist_map
+( xs
+: mylist(x0)
+, fopr: (x0) -> y0): mylist(y0) =
+foreach_to_map_list(mylist_foreach)(xs, fopr)
+//
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+{y0:t@ype}
+mystream_map
+( fxs
+: mystream(x0)
+, fopr: (x0) -> y0): mystream(y0) =
+(
+  auxmain(fxs) ) where
+{
+fun
+auxmain
+(fxs
+: mystream(x0)
+)
+: mystream(y0) = lam() =>
+(
+case+ fxs() of
+|
+myllist_nil() =>
+myllist_nil()
+|
+myllist_cons(x1, xs) =>
+myllist_cons(fopr(x1), auxmain(fxs))) }
+//
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+mylist_takeouts
+(xs: mylist(x0)): mylist@(x0, mylist(x0)) =
+(
+case xs of
+|
+mylist_nil() =>
+mylist_nil()
+|
+mylist_cons(x1, xs) =>
+mylist_cons
+(
+@(x1, xs)
+,
+mylist_map<(x0,mylist(x0))><(x0,mylist(x0))>
+( mylist_takeouts(xs)
+, lam(xxs) => (xxs.0, mylist_cons(x1, xxs.1))))
+)
+//
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+mystream_append
+( fxs: mystream(x0)
+, fys: mystream(x0)): mystream(x0) =
+(
+  auxmain(fxs) ) where
+{
+fun
+auxmain(fxs: mystream(x0)): mystream(x0) = lam() =>
+(
+case+ fxs() of
+|
+myllist_nil() => fys()
+|
+myllist_cons(x1, fxs) => myllist_cons(x1, auxmain(fxs))) }
+//
+(* ****** ****** *)
+
+fun
+{x0:t@ype}
+mystream_concat_list
+( xss
+: mylist(mystream(x0))): mystream(x0) =
+(
+  auxmain(xss) ) where
+{
+fun
+auxmain
+( xss
+: mylist(mystream(x0))): mystream(x0) = lam() =>
+(
+case+ xss of
+|
+mylist_nil() => myllist_nil()
+|
+mylist_cons(fxs, xss) => mystream_append<x0>(fxs, auxmain(xss))()) }
+//
+(* ****** ****** *)
+
+fun
+{x0:t@ype}
+mylist_permute
+(xs: mylist(x0)): mystream(mylist(x0)) = lam() =>
+(
+case+ xs of
+|
+mylist_nil() =>
+myllist_sing(mylist_nil())
+|
+mylist_cons(_, _) =>
+mystream_concat_list<mylist(x0)>
+(mylist_map(mylist_takeouts(xs), lam(xxs) => mystream_map(mylist_permute(xxs.1), lam xs => mylist_cons(xxs.0, xs))))())
 
 (* ****** ****** *)
 
