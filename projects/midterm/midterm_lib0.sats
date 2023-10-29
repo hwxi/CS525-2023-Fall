@@ -47,7 +47,7 @@ Please implement the following
 three programs in LAMBDA
 *)
 //
-val TMword_buddy_stream: term
+val TMword_buddy_list: term
 (*
 Any string is a legal word.
 There is no need for a dictionary.

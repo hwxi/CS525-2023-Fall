@@ -146,6 +146,28 @@ end (* end of [forall_to_foreach]: let *)
 
 (* ****** ****** *)
 //
+fun
+int_foreach
+( n0: int
+, work: int -> void): void =
+forall_to_foreach(int_forall)(n0, work)
+fun
+str_foreach
+( cs: string
+, work: char -> void): void =
+forall_to_foreach(str_forall)(cs, work)
+//
+(* ****** ****** *)
+//
+fun
+{x0:t@ype}
+mylist_foreach
+( xs: mylist(x0)
+, work: (x0) -> void): void =
+forall_to_foreach(mylist_forall)(xs, work)
+//
+(* ****** ****** *)
+//
 extern
 fun
 {xs:t@ype}
@@ -395,15 +417,6 @@ foreach_to_foldleft(foreach)
 (xs, mylist_nil, lam(r0, x0) => mylist_cons(fopr(x0), r0))))
 //
 (* ****** ****** *)
-(* ****** ****** *)
-//
-fun
-{x0:t@ype}
-mylist_foreach
-( xs: mylist(x0)
-, work: (x0) -> void): void =
-forall_to_foreach(mylist_forall)(xs, work)
-//
 (* ****** ****** *)
 //
 fun
