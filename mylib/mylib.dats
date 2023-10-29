@@ -101,6 +101,7 @@ mylist_map
 //
 extern
 fun
+{(*tmp*)}
 string_make_mylist(mylist(char)): string
 //
 (* ****** ****** *)
@@ -255,6 +256,7 @@ mylist_cons(fopr(x1), mylist_map(xs, fopr))
 (* ****** ****** *)
 //
 implement
+{}(*tmp*)
 string_make_mylist(cs) =
 strnptr2string
 (string_make_list($UN.cast{List0(charNZ)}(cs)))
