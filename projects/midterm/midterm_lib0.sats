@@ -10,23 +10,25 @@ val TMint_forall: term
 val TMstr_forall: term
 val TMlist_forall: term
 //
-(* ****** ****** *)
-
-val TMstr_make_fwork: term
-val TMlist_make_fwork: term
-
-(* ****** ****** *)
-//
-val TMlistize: term
-val TMrlistize: term
-//
-val TMstreamize: term
-//
-(* ****** ****** *)
 val TMstream_forall: term
+//
 (* ****** ****** *)
 //
 val TMforall_get_at: term
+//
+(* ****** ****** *)
+//
+val TMforall_foreach: term
+//
+(* ****** ****** *)
+//
+val TMforeach_listize: term
+val TMforeach_rlistize: term
+//
+(* ****** ****** *)
+//
+val TMstr_make_fwork: term
+val TMlist_make_fwork: term
 //
 (* ****** ****** *)
 //

@@ -89,15 +89,6 @@ fprint_mylist
 #symload print with print_mylist
 #symload fprint with fprint_mylist
 (* ****** ****** *)
-
-extern
-fun
-{a:t@ype}
-{b:t@ype}
-mylist_map
-(xs: mylist(a), fopr: a -> b): mylist(b)
-
-(* ****** ****** *)
 //
 extern
 fun
@@ -105,6 +96,15 @@ fun
 string_make_mylist(mylist(char)): string
 //
 (* ****** ****** *)
+(* ****** ****** *)
+//
+datatype
+myllist(a:t@ype) =
+| myllist_nil of ()
+| myllist_cons of (a, mystream(a))
+//
+where mystream(a:t@ype) = () -> myllist(a)
+//
 (* ****** ****** *)
 //
 implement
@@ -241,18 +241,6 @@ in//let
 fprint(out, "(");loop(xs, 0);fprint(out, ")")
 end//let//end-of-[fprint_mylist(out, xs)]
 
-(* ****** ****** *)
-//
-implement
-{a}{b}//tmp
-mylist_map(xs, fopr) =
-case+ xs of
-|
-mylist_nil() => mylist_nil()
-|
-mylist_cons(x1, xs) =>
-mylist_cons(fopr(x1), mylist_map(xs, fopr))
-//
 (* ****** ****** *)
 //
 implement
