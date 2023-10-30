@@ -44,7 +44,15 @@ val TMforeach_foldright: term
 (*
 HX-2023-10-21:
 Please implement the following
-three programs in LAMBDA
+three programs in LAMBDA:
+
+TMword_buddy_list:
+involving only list
+TMlist_permute_stream:
+involving list and llist 
+TMnqueen_puzzle_solve:
+involving list and llist 
+
 *)
 //
 val TMword_buddy_list: term
