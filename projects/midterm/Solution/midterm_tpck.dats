@@ -62,8 +62,10 @@ TPxyz(r2) => (r1 = r2)
 //
 |
 TPref(T1) => occurs(T1)
+(*
 |
 TPlazy(T1) => occurs(T1)
+*)
 //
 |
 TPlist(T1) => occurs(T1)
@@ -162,6 +164,8 @@ case+ T2 of
 |
 TPref(T20) =>
 unify(T10, T20) | _(*non-TPref*) => false)
+//
+(*
 |
 TPlazy(T10) =>
 (
@@ -169,6 +173,7 @@ case+ T2 of
 |
 TPlazy(T20) =>
 unify(T10, T20) | _(*non-TPlazy*) => false)
+*)
 //
 |
 TPlist(T10) =>

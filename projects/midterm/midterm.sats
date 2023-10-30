@@ -21,8 +21,11 @@ TPxyz of txyz
 //
 |
 TPref of type
+//
+(*
 |
 TPlazy of type
+*)
 //
 |
 TPlist of type // for lists

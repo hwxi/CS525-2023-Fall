@@ -42,9 +42,12 @@ fprint!(out, "TPxyz(", !r0, ")")
 |
 TPref(T1) =>
 fprint!(out, "TPref(", T1, ")")
+//
+(*
 |
 TPlazy(T1) =>
 fprint!(out, "TPlazy(", T1, ")")
+*)
 //
 |
 TPlist(T1) =>
