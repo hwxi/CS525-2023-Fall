@@ -103,7 +103,8 @@ myllist(a:t@ype) =
 | myllist_nil of ()
 | myllist_cons of (a, mystream(a))
 //
-where mystream(a:t@ype) = () -> myllist(a)
+where
+mystream(a:t@ype) = () -<cloref1> myllist(a)
 //
 (* ****** ****** *)
 //

@@ -1,4 +1,8 @@
 (* ****** ****** *)
+#include
+"share\
+/atspre_staload.hats"
+(* ****** ****** *)
 #include "./mylib.dats"
 (* ****** ****** *)
 (*
@@ -33,7 +37,7 @@ val AB = "abcdefghijklmnopqrstuvwxyz"
 fun
 str_tabulate
 ( n0: int
-, fopr: int -> char): string =
+, fopr: int -<cloref1> char): string =
 string_make_mylist
 (foreach_to_map_list(int_foreach)(n0, fopr))
 //
@@ -77,6 +81,14 @@ end//let//end-of-lam
 ) (* end-of-[mylist_make_fwork] *)
 end//let//end-of-[mylist_of_buddies]
 
+(* ****** ****** *)
+(* ****** ****** *)
+implement main0() =
+let
+val
+buddies =
+mylist_of_buddies("love") in println!("buddies(love) = ", buddies)
+end // let // end-of-[main0]
 (* ****** ****** *)
 
 (* end of [CS525-2022-Fall/exams/midterm/word_buddy_list.dats] *)
