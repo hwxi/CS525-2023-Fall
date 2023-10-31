@@ -6,6 +6,11 @@
 #include "./mylib.dats"
 (* ****** ****** *)
 (*
+Compile and test:
+myatscc word_buddy_list.dats && ./word_buddy_list_dats
+*)
+(* ****** ****** *)
+(*
 //
 Given a word w1 and another word w2, w1 and w2 are a
 1-step doublet if w1 and w2 differ at exactly one position.

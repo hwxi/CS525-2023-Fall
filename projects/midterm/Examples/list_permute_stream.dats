@@ -13,6 +13,11 @@ the enumeration should be of the following order
 [1;2;3], [1;3;2], [2;1;3], [2;3;1], [3;1;2], [3;2;1].
 *)
 (* ****** ****** *)
+(*
+Compile and test:
+myatscc list_permute_stream.dats && ./list_permute_stream_dats
+*)
+(* ****** ****** *)
 //
 fun
 {x0:t@ype}
