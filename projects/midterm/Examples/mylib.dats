@@ -465,7 +465,7 @@ mystream_map
 {
 fun
 auxmain
-(fxs
+( fxs
 : mystream(x0)
 )
 : mystream(y0) = lam() =>
