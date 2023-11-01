@@ -55,7 +55,7 @@ str_tabulate
 (
 str_length(cs),
 lam i1 =>
-if i1 != i0 then str_get_at(cs, i0) else c0)
+if i1 != i0 then str_get_at(cs, i1) else c0)
 //
 (* ****** ****** *)
 //
