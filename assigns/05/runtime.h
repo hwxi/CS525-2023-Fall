@@ -53,7 +53,7 @@ struct{
 // 0 for false
 //
 typedef
-lamval0_btf lamval0_int;
+lamval0_int lamval0_btf;
 
 typedef
 struct{
