@@ -65,6 +65,14 @@ typedef lamval0_str *lamval1_str;
 
 /* ****** ****** */
 
+typedef
+struct{
+  int tag; void* fenv;
+} lamval0_clo;
+typedef lamval0_clo *lamval1_clo;
+
+/* ****** ****** */
+
 /*
 boxing for lamval_int
 */

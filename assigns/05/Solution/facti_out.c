@@ -36,7 +36,7 @@ int_foldleft
   loop(0, r0)) where
 {
 fun
-loop(i0) =
+loop(i0, r0) =
 if (i0 >= n0) then r0 else loop(i0+1, fopr(r0, i0))
 }
 
