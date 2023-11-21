@@ -37,18 +37,7 @@ fprint!(out, "TPbas(", nm, ")")
 //
 |
 TPxyz(r0) =>
-(
-case+ !r0 of
-|
-myoptn_nil() =>
-let
-val p0 = ref_get_ptr(r0) in
-fprint!(out, "TPxyz(", p0, ")")
-end // end of [myoptn_nil]
-|
-myoptn_cons(T1) =>
-fprint!(out, "TPxyz(", T1, ")")
-)
+fprint!(out, "TPxyz(", !r0, ")")
 //
 |
 TPref(T1) =>
@@ -369,364 +358,35 @@ end // end-of-let
 with ~TypeError() => println!("TPstr_foreach: type error!")
 //
 (* ****** ****** *)
-//
+
 val-
 VALnil() =
 term_eval0
-(TMapp(TMapp
-(TMstr_foreach, TMstr"Hello, world!\n"), TMlam("c", TMprchr(TMvar"c"))))
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPlist_forall =
-term_type0(TMlist_forall)
-in//let
-println!
-("TPlist_forall = ", TPlist_forall)
-end // end-of-let
-with ~TypeError() => println!("TPlist_forall: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPlist_foreach =
-term_type0(TMlist_foreach)
-in//let
-println!
-("TPlist_foreach = ", TPlist_foreach)
-end // end-of-let
-with ~TypeError() => println!("TPlist_foreach: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPforeach_foldleft =
-term_type0(TMforeach_foldleft)
-in//let
-println!
-("TPforeach_foldleft = ", TPforeach_foldleft)
-end // end-of-let
-with ~TypeError() => println!("TPforeach_foldleft: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPlist_foldleft =
-term_type0(TMlist_foldleft)
-in//let
-println!
-("TPlist_foldleft = ", TPlist_foldleft)
-end // end-of-let
-with ~TypeError() => println!("TPlist_foldleft: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPlist_length =
-term_type0(TMlist_length)
-in//let
-println!
-("TPlist_length = ", TPlist_length)
-end // end-of-let
-with ~TypeError() => println!("TPlist_length: type error!")
-//
-val () =
-try
-let
-val
-TPlist_rappend =
-term_type0(TMlist_rappend)
-in//let
-println!
-("TPlist_rappend = ", TPlist_rappend)
-end // end-of-let
-with ~TypeError() => println!("TPlist_rappend: type error!")
-//
-val () =
-try
-let
-val
-TPlist_reverse =
-term_type0(TMlist_reverse)
-in//let
-println!
-("TPlist_reverse = ", TPlist_reverse)
-end // end-of-let
-with ~TypeError() => println!("TPlist_reverse: type error!")
-//
-val () =
-try
-let
-val
-TPlist_append2 =
-term_type0(TMlist_append2)
-in//let
-println!
-("TPlist_append2 = ", TPlist_append2)
-end // end-of-let
-with ~TypeError() => println!("TPlist_append2: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPint_map_list =
-term_type0(TMint_map_list)
-in//let
-println!
-("TPint_map_list = ", TPint_map_list)
-end // end-of-let
-with ~TypeError() => println!("TPint_map_list: type error!")
-//
-val () =
-try
-let
-val
-TPstr_map_list =
-term_type0(TMstr_map_list)
-in//let
-println!
-("TPstr_map_list = ", TPstr_map_list)
-end // end-of-let
-with ~TypeError() => println!("TPstr_map_list: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-println!
-("TMstr_listize: res = ", res) where
-{ val res =
-  term_eval0
-  (TMapp(TMstr_listize, TMstr"Hello, world!")) }
-//
-//
-val () =
-println!
-("TMlist_append2: res = ", res) where
-{
-  val cs1 = TMapp(TMstr_listize, TMstr"Hello")
-  val cs2 = TMapp(TMstr_listize, TMstr", world!")
-  val res =
-  term_eval0(TMapp(TMapp(TMlist_append2, cs1), cs2)) }
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPint_map_rlist =
-term_type0(TMint_map_rlist)
-in//let
-println!
-("TPint_map_rlist = ", TPint_map_rlist)
-end // end-of-let
-with ~TypeError() => println!("TPint_map_rlist: type error!")
-//
-val () =
-try
-let
-val
-TPstr_map_rlist =
-term_type0(TMstr_map_rlist)
-in//let
-println!
-("TPstr_map_rlist = ", TPstr_map_rlist)
-end // end-of-let
-with ~TypeError() => println!("TPstr_map_rlist: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPstr_make_fwork =
-term_type0(TMstr_make_fwork)
-in//let
-println!
-("TPstr_make_fwork = ", TPstr_make_fwork)
-end // end-of-let
-with ~TypeError() => println!("TPstr_make_fwork: type error!")
-//
-val () =
-try
-let
-val
-TPlist_make_fwork =
-term_type0(TMlist_make_fwork)
-in//let
-println!
-("TPlist_make_fwork = ", TPlist_make_fwork)
-end // end-of-let
-with ~TypeError() => println!("TPlist_make_fwork: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-println!
-("TMstr_append2: res = ", res) where
-{
-  val cs1 = TMstr"Hello"
-  val cs2 = TMstr", world!"
-  val res = term_eval0(TMapp(TMapp(TMstr_append2, cs1), cs2)) }
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPlist_takeouts =
-term_type0(TMlist_takeouts)
-in//let
-println!
-("TPlist_takeouts = ", TPlist_takeouts)
-end // end-of-let
-with ~TypeError() => println!("TPlist_takeouts: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPstream_map =
-term_type0(TMstream_map)
-in//let
-println!
-("TPstream_map = ", TPstream_map)
-end // end-of-let
-with ~TypeError() => println!("TPstream_map: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPstr_fset_at =
-term_type0(TMstr_fset_at)
-in//let
-println!
-("TPstr_fset_at = ", TPstr_fset_at)
-end // end-of-let
-with ~TypeError() => println!("TPstr_fset_at: type error!")
-//
-val () =
-try
-let
-val
-TPlist_of_buddies =
-term_type0(TMlist_of_buddies)
-in//let
-println!
-("TPlist_of_buddies = ", TPlist_of_buddies)
-end // end-of-let
-with ~TypeError() => println!("TPlist_of_buddies: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPstream_append2 =
-term_type0(TMstream_append2)
-in//let
-println!
-("TPstream_append2 = ", TPstream_append2)
-end // end-of-let
-with ~TypeError() => println!("TPstream_append2: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPstream_concat_list =
-term_type0(TMstream_concat_list)
-in//let
-println!
-("TPstream_concat_list = ", TPstream_concat_list)
-end // end-of-let
-with ~TypeError() => println!("TPstream_concat_list: type error!")
-//
-(* ****** ****** *)
-//
-val () =
-try
-let
-val
-TPlist_permute_stream =
-term_type0(TMlist_permute_stream)
-in//let
-println!
-("TPlist_permute_stream = ", TPlist_permute_stream)
-end // end-of-let
-with ~TypeError() => println!("TPlist_permute_stream: type error!")
-//
-(* ****** ****** *)
-//
-val
-VALlist_of_buddies =
-term_eval0
-(TMapp(TMlist_of_buddies, TMstr("love")))
-val () =
-println!
-("VALlist_of_buddies: love = ", VALlist_of_buddies)
-//
-(* ****** ****** *)
-//
-local
-val
-VALlist_permute_stream5 =
-term_eval0
 (
 TMapp(
-TMlist_permute_stream,
-TMapp(TMint_listize, TMint(5))))
-in//local
-val fxs = VALlist_permute_stream5
-val-VALlam(fxs, env) = fxs
-val-VALtup(xs1, fxs) = term_eval1(TMeval(fxs), env)
-val () = println!("VALlist_permute_stream5: xs1 = ", xs1)
-val-VALlam(fxs, env) = fxs
-val-VALtup(xs2, fxs) = term_eval1(TMeval(fxs), env)
-val () = println!("VALlist_permute_stream5: xs2 = ", xs2)
-val-VALlam(fxs, env) = fxs
-val-VALtup(xs3, fxs) = term_eval1(TMeval(fxs), env)
-val () = println!("VALlist_permute_stream5: xs3 = ", xs3)
-val-VALlam(fxs, env) = fxs
-val-VALtup(xs4, fxs) = term_eval1(TMeval(fxs), env)
-val () = println!("VALlist_permute_stream5: xs4 = ", xs4)
-val-VALlam(fxs, env) = fxs
-val-VALtup(xs5, fxs) = term_eval1(TMeval(fxs), env)
-val () = println!("VALlist_permute_stream5: xs5 = ", xs5)
-val-VALlam(fxs, env) = fxs
-val-VALtup(xs6, fxs) = term_eval1(TMeval(fxs), env)
-val () = println!("VALlist_permute_stream5: xs6 = ", xs6)
-end//local
-//
+TMapp(
+TMstr_foreach,
+TMstr"Hello, world!\n"), TMlam("c", TMprchr(TMvar"c"))))
+
+(* ****** ****** *)
+
+val TMisprime =
+let
+val i0 = TMvar"i0"
+val n0 = TMvar"n0" in
+TMlam("n0",
+TMapp(
+TMapp(
+TMint_forall,
+TMsub(n0, TMint(2))),
+TMlam("i0", TMgt(TMmod(n0, TMadd(i0, TMint(2))), TMint(0)))))
+end
+
+(* ****** ****** *)
+
+val () =
+println!("isprime(727) = ", term_eval0(TMapp(TMisprime, TMint(727))))
+
 (* ****** ****** *)
 
 (* end of [CS525-2022-Fall/projects/midterm/Solution/midterm_main.dats] *)

@@ -23,6 +23,20 @@ val TPbtf = TPbas("bool")
 val TPchr = TPbas("char")
 val TPstr = TPbas("string")
 (* ****** ****** *)
+fun
+TPlazy
+( Te
+: type): type =
+(
+  TPfun(TPnil, Te))
+(* ****** ****** *)
+fun
+TPstream
+( Te
+: type): type =
+(
+  TPlazy(TPllist(Te)))
+(* ****** ****** *)
 implement
 tpxyz_new() =
 TPxyz(ref(myoptn_nil()))
@@ -62,6 +76,7 @@ TPxyz(r2) => (r1 = r2)
 //
 |
 TPref(T1) => occurs(T1)
+//
 (*
 |
 TPlazy(T1) => occurs(T1)
@@ -212,6 +227,16 @@ TPtup(T21, T22) =>
 } (*where*) // end of [ type_unify(T1, T2) ]
 //
 (* ****** ****** *)
+//
+fun
+type_unify_ck
+( T1: type
+, T2: type): void =
+if
+type_unify(T1, T2)
+then () else $raise TypeError()
+//
+(* ****** ****** *)
 
 implement
 term_type0
@@ -232,10 +257,10 @@ TPxyz(r1) =>
 let
 val T1 = tpxyz_new()
 val T2 = tpxyz_new()
-in
+in//let
 !r1 :=
 myoptn_cons(TPfun(T1, T2))
-end
+end//let
 //
 | TPfun _ => ()
 | _(*else*) =>
@@ -257,12 +282,37 @@ TPxyz(r1) =>
 let
 val T1 = tpxyz_new()
 val T2 = tpxyz_new()
-in
+in//let
 !r1 :=
 myoptn_cons(TPtup(T1, T2))
-end
+end//let
 //
 | TPtup _ => ()
+| _(*else*) =>
+  $raise TypeError()
+) where
+{
+  val T0 = type_norm(T0) }
+//
+(* ****** ****** *)
+//
+fun
+type_listize
+(T0: type): void =
+(
+case+ T0 of
+//
+|
+TPxyz(r1) =>
+let
+val T1 = tpxyz_new()
+in//let
+(
+  !r1 :=
+  myoptn_cons(TPlist(T1)))
+end//let
+//
+| TPlist _ => ()
 | _(*else*) =>
   $raise TypeError()
 ) where
@@ -305,7 +355,7 @@ in//let
 {
   val Tt = term_type1(tt, c1)
 }
-end//end-of-[TMlam(x0,Tx,tt)]
+end//end-of-[TMlamt(x0,Tx,tt)]
 //
 |
 TMapp(t1, t2) =>
@@ -352,6 +402,17 @@ term_type1_ck(t1, TPint, c0)
 val () =
 term_type1_ck(t2, TPint, c0) }
 //
+| "=" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
 | ">=" => TPbtf where
 {
 val-
@@ -364,6 +425,17 @@ val () =
 term_type1_ck(t2, TPint, c0) }
 //
 | "<=" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+val () =
+term_type1_ck(t2, TPint, c0) }
+//
+| "!=" => TPbtf where
 {
 val-
 mylist_cons(t1, ts) = ts
@@ -431,6 +503,40 @@ term_type1_ck(t2, TPint, c0) }
 //
 (* ****** ****** *)
 //
+| "ord" => TPint where
+{
+val-
+mylist_cons(t1, ts) = ts
+val () =
+term_type1_ck(t1, TPchr, c0)
+}
+//
+(* ****** ****** *)
+//
+| "prchr" => TPnil where
+{
+val-
+mylist_cons(t1, ts) = ts
+val () =
+term_type1_ck(t1, TPchr, c0)
+}
+| "print" => TPnil where
+{
+val-
+mylist_cons(t1, ts) = ts
+val () =
+term_type1_ck(t1, TPint, c0)
+}
+| "prstr" => TPnil where
+{
+val-
+mylist_cons(t1, ts) = ts
+val () =
+term_type1_ck(t1, TPstr, c0)
+}
+//
+(* ****** ****** *)
+//
 |
 "str_len" => TPint where
 {
@@ -450,6 +556,149 @@ val () =
 term_type1_ck(t1, TPstr, c0)
 val () =
 term_type1_ck(t2, TPint, c0) }
+//
+|
+"str_make_list" => TPstr where
+{
+val-
+mylist_cons(t1, ts) = ts
+val TPchrs = TPlist(TPchr)
+val () =
+term_type1_ck(t1, TPchrs, c0) }
+//
+(* ****** ****** *)
+//
+|
+"ref_new" => TPref(Te) where
+{
+val-
+mylist_cons(t1, ts) = ts
+val Te = term_type1(t1, c0) }
+|
+"ref_get" => Te where
+//
+{
+val-
+mylist_cons(t1, ts) = ts
+val Te = tpxyz_new()
+val Tr = (TPref(Te))
+val () =
+term_type1_ck(t1, Tr, c0) }
+|
+"ref_set" => TPnil where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+val Tr = term_type1(t1, c0)
+val Te = term_type1(t2, c0)
+val () =
+type_unify_ck(Tr, TPref(Te)) }
+//
+(* ****** ****** *)
+//
+| "list_nil" =>
+(
+  TPlist(tpxyz_new()))
+| "list_cons" => T2 where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+//
+val T1 = term_type1(t1, c0)
+val T2 = term_type1(t2, c0)
+//
+val () =
+type_unify_ck(T2, TPlist(T1)) }
+//
+| "list_nilq" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val Ts = TPlist(tpxyz_new())
+val () = term_type1_ck(t1, Ts, c0)
+}
+| "list_consq" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val Ts = TPlist(tpxyz_new())
+val () = term_type1_ck(t1, Ts, c0)
+}
+//
+| "list_uncons1" => Te where
+{
+val-
+mylist_cons(t1, ts) = ts
+val Te = tpxyz_new()
+val Ts = (TPlist(Te))
+val () = term_type1_ck(t1, Ts, c0)
+}
+| "list_uncons2" => Ts where
+{
+val-
+mylist_cons(t1, ts) = ts
+val Te = tpxyz_new()
+val Ts = (TPlist(Te))
+val () = term_type1_ck(t1, Ts, c0)
+}
+//
+(* ****** ****** *)
+//
+| "llist_nil" =>
+(
+  TPllist(tpxyz_new()))
+| "llist_cons" => Ts where
+{
+val-
+mylist_cons(t1, ts) = ts
+val-
+mylist_cons(t2, ts) = ts
+//
+val Te = term_type1(t1, c0)
+//
+val Ts = TPllist(Te)
+val Tz = (TPlazy(Ts))
+//
+val () = term_type1_ck(t2, Tz, c0)
+//
+}
+//
+| "llist_nilq" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val Ts = TPllist(tpxyz_new())
+val () = term_type1_ck(t1, Ts, c0)
+}
+| "llist_consq" => TPbtf where
+{
+val-
+mylist_cons(t1, ts) = ts
+val Ts = TPllist(tpxyz_new())
+val () = term_type1_ck(t1, Ts, c0)
+}
+//
+| "llist_uncons1" => Te where
+{
+val-
+mylist_cons(t1, ts) = ts
+val Te = tpxyz_new()
+val Ts = TPllist(Te)
+val () = term_type1_ck(t1, Ts, c0)
+}
+| "llist_uncons2" => Tz where
+{
+val-
+mylist_cons(t1, ts) = ts
+val Te = tpxyz_new()
+val Ts = TPllist(Te)
+val Tz = (TPlazy(Ts))
+val () = term_type1_ck(t1, Ts, c0)
+}
 //
 (* ****** ****** *)
 //
@@ -613,12 +862,9 @@ if x0 = xt1.0 then xt1.1 else tpctx_lookup(xts, x0)
 implement
 term_type1_ck
 (t0, Tt, ctx) =
-let
-val res =
-type_unify(T0, Tt)
-in
-if res then () else $raise TypeError()
-end where
+(
+type_unify_ck(T0, Tt)
+) where
 {
 val T0 = term_type1(t0, ctx)
 (*
