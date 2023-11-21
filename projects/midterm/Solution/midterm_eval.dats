@@ -15,8 +15,8 @@ CS525-2023-Fall: midterm
 #staload
 "./../../../mylib/mylib.dats"
 (* ****** ****** *)
-exception EXNstr_get_at
 (* ****** ****** *)
+exception EXNstr_get_at
 exception EXNoptn_uncons1
 (* ****** ****** *)
 exception EXNlist_uncons1
@@ -24,6 +24,30 @@ exception EXNlist_uncons2
 (* ****** ****** *)
 exception EXNllist_uncons1
 exception EXNllist_uncons2
+(* ****** ****** *)
+(* ****** ****** *)
+//
+extern
+fun
+{a:t@ype}
+{b:t@ype}
+mylist_map
+( xs: mylist(a)
+, fopr: a -> b): mylist(b)
+//
+implement
+{a}{b}//tmp
+mylist_map(xs, fopr) =
+case+ xs of
+|
+mylist_nil() =>
+mylist_nil()
+|
+mylist_cons(x1, xs) =>
+mylist_cons
+(fopr(x1), mylist_map(xs, fopr))
+//
+(* ****** ****** *)
 (* ****** ****** *)
 //
 implement
@@ -103,6 +127,14 @@ val-VALint(i1) = v1 and VALint(i2) = v2
 in
   VALbtf(i1 > i2)
 end
+| "=" =>
+let
+val-mylist_cons(v1, vs) = vs
+val-mylist_cons(v2, vs) = vs
+val-VALint(i1) = v1 and VALint(i2) = v2
+in
+  VALbtf(i1 = i2)
+end
 | "<=" =>
 let
 val-mylist_cons(v1, vs) = vs
@@ -118,6 +150,14 @@ val-mylist_cons(v2, vs) = vs
 val-VALint(i1) = v1 and VALint(i2) = v2
 in
   VALbtf(i1 >= i2)
+end
+| "!=" =>
+let
+val-mylist_cons(v1, vs) = vs
+val-mylist_cons(v2, vs) = vs
+val-VALint(i1) = v1 and VALint(i2) = v2
+in
+  VALbtf(i1 != i2)
 end
 //
 | "+" =>
@@ -159,6 +199,17 @@ val-mylist_cons(v2, vs) = vs
 val-VALint(i1) = v1 and VALint(i2) = v2
 in
   VALint(i1 % i2)
+end
+//
+(* ****** ****** *)
+//
+| "ord" =>
+let
+val-
+mylist_cons
+( v1 , vs ) = vs
+val-
+VALchr(c0) = v1 in VALint(char2int0(c0))
 end
 //
 (* ****** ****** *)
@@ -221,6 +272,22 @@ then $raise EXNstr_get_at
 else VALchr(string_get_at(cs, i0)) ) end
 end // end of [str_get_at]
 //
+| "str_make_list" =>
+let
+val-mylist_cons(v1, vs) = vs
+in//let
+let
+val-VALlst(cs) = v1 in
+VALstr
+(
+string_make_mylist
+(
+mylist_map
+( cs
+, lam c =>
+  let val-VALchr(c) = c in c end)) ) end
+end // end of [str_make_list]
+//
 (* ****** ****** *)
 //
 | "ref_get" =>
@@ -250,11 +317,107 @@ end // end of [ref_new]
 //
 (* ****** ****** *)
 (*
+list_nil, list_cons
 list_nilq, list_consq,
 list_uncons1, list_uncons2
+*)
+| "list_nil" =>
+VALlst(mylist_nil())
+| "list_cons" =>
+let
+val-
+mylist_cons(v1, vs) = vs
+val-
+mylist_cons(v2, vs) = vs in
+let
+val-VALlst(xs) = v2 in
+VALlst(mylist_cons(v1, xs)) end end
+//
+| "list_nilq" =>
+let
+val-
+mylist_cons(v1, vs) = vs in
+let
+val-
+VALlst(xs) = v1 in VALbtf(mylist_nilq(xs))
+end
+end // end of [list_nilq]
+| "list_consq" =>
+let
+val-
+mylist_cons(v1, vs) = vs in
+let
+val-
+VALlst(xs) = v1 in VALbtf(mylist_consq(xs))
+end
+end // end of [list_consq]
+//
+| "list_uncons1" =>
+let
+val-
+mylist_cons(v1, vs) = vs in
+let
+val-
+VALlst(xs) = v1 in case+ xs of
+| mylist_nil() =>
+  $raise EXNlist_uncons1()
+| mylist_cons(x1, xs) => x1 end end // let
+//
+| "list_uncons2" =>
+let
+val-
+mylist_cons(v1, vs) = vs in
+let
+val-
+VALlst(xs) = v1 in case+ xs of
+| mylist_nil() =>
+  $raise EXNlist_uncons2()
+| mylist_cons(x1, xs) => VALlst(xs) end end
+//
+(* ****** ****** *)
+(*
+llist_nil, llist_cons
 llist_nilq, llist_consq
 llist_uncons1, llist_uncons2
 *)
+| "llist_nil" => VALnil()
+| "llist_cons" =>
+(
+  VALtup(v1, v2) ) where
+{
+  val-mylist_cons(v1, vs) = vs
+  val-mylist_cons(v2, vs) = vs }
+//
+| "llist_nilq" =>
+let
+val-
+mylist_cons(v1, vs) = vs in
+(
+case+ v1 of
+| VALnil() => VALbtf(true)
+| _(*non-VALnil*) => VALbtf(false)) end
+| "llist_consq" =>
+let
+val-
+mylist_cons(v1, vs) = vs in
+(
+case+ v1 of
+| VALtup _ => VALbtf(true)
+| _(*non-VALtup*) => VALbtf(false)) end
+//
+| "llist_uncons1" =>
+let
+val-
+mylist_cons(v1, vs) = vs in
+let
+val-VALtup(v11, v12) = v1 in v11 end end
+| "llist_uncons2" =>
+let
+val-
+mylist_cons(v1, vs) = vs in
+let
+val-VALtup(v11, v12) = v1 in v12 end end
+//
 (* ****** ****** *)
 //
 | _(*unsupported*) =>
