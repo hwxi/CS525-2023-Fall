@@ -9,6 +9,11 @@
 #staload
 "./../../../mylib/mylib.dats"
 (* ****** ****** *)
+infixr (+) ^
+#symload ^ with string_append
+(* ****** ****** *)
+#symload snoc with mylist_extend
+(* ****** ****** *)
 //
 (*
 HX-2022-10-19:
@@ -181,7 +186,7 @@ implement
 t2lam_new
 ((*void*)) =
 (
-"mylam" +
+"mylam" ^
 int2str(n0)) where
 {
 val n0 = mycount[]
@@ -344,7 +349,6 @@ mylist_append<a>
 HX-2022-11-11:
 This one is already in mylib
 *)
-overload + with mylist_extend
 //
 (* ****** ****** *)
 
@@ -388,7 +392,7 @@ T2BND(treg, T2Itup(t2x1, t2x2))
 val
 bnds = mylist_append(bds1, bds2)
 in//let
-  T2CMP(bnds + tbnd, T2Vreg(treg))
+  T2CMP(bnds \snoc tbnd, T2Vreg(treg))
 end (*let*) // end of [T1Mtup(t1m1,t1m2)]
 //
 |

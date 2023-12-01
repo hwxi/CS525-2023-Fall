@@ -10,6 +10,21 @@ for BU CAS CS 525 (2023F)
 #staload UN =
 "prelude/SATS/unsafe.sats"
 (* ****** ****** *)
+//
+extern
+fun{}
+int2str(int): string
+//
+extern
+fun{}
+string_append
+(string, string): string
+//
+(*
+#symload ^ with string_append
+*)
+//
+(* ****** ****** *)
 
 extern
 fun
@@ -70,8 +85,17 @@ fun{a:t@ype}
 mylist_sing(x1: a): mylist(a)
 extern
 fun{a:t@ype}
-mylist_pair(x1:a, x2:a): mylist(a)
+mylist_pair(x1:a,x2:a): mylist(a)
 //
+(* ****** ****** *)
+extern
+fun{a:t@ype}
+mylist_append
+(mylist(a), mylist(a)): mylist(a)
+extern
+fun{a:t@ype}
+mylist_extend
+(xs: mylist(a), x0: a): mylist(a)
 (* ****** ****** *)
 //
 extern
@@ -107,15 +131,31 @@ where
 mystream(a:t@ype) = () -<cloref1> myllist(a)
 //
 (* ****** ****** *)
+(* ****** ****** *)
+//
+implement
+{}//tmp
+int2str(int) =
+strptr2string
+(g0int2string(int))
+//
+(* ****** ****** *)
+//
+implement
+{}//tmp
+string_append(cs1, cs2) =
+strptr2string
+(string0_append<>(cs1, cs2))
+//
+(* ****** ****** *)
 //
 implement
 {a}
 ref_equal
 (r1, r2) =
 ( ref_get_ptr(r1)
-= ref_get_ptr(r2) )
+= ref_get_ptr(r2) )//end-of-impl
 //
-(* ****** ****** *)
 (* ****** ****** *)
 //
 implement
@@ -190,6 +230,34 @@ implement
 mylist_pair(x1, x2) =
 mylist_cons(x1, mylist_sing<a>(x2))
 
+(* ****** ****** *)
+//
+implement
+{a}//tmp
+mylist_extend
+(xs, x0) =
+mylist_append<a>
+(xs, mylist_sing<a>(x0))
+//
+implement
+{a}//tmp
+mylist_append
+(xs, ys) =
+(
+  auxmain(xs)) where
+{
+fun
+auxmain
+(xs: mylist(a)): mylist(a) =
+(
+case+ xs of
+| mylist_nil() => ys
+| mylist_cons(x1, xs) =>
+(
+  mylist_cons(x1, auxmain(xs)))
+)
+}(*where*)//end-of-[mylist_append]
+//
 (* ****** ****** *)
 
 implement
